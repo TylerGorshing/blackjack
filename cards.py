@@ -8,7 +8,16 @@ class Card(object):
         self.suit = suit
 
     def show(self):
-        print('{} of {}'.format(self.value, self.suit))
+        if self.value == 1:
+            print('Ace of {}'.format(self.suit))
+        elif self.value < 11:
+            print('{} of {}'.format(self.value, self.suit))
+        elif self.value == 11:
+            print('Jack of {}'.format(self.suit))
+        elif self.value == 12:
+            print('Queen of {}'.format(self.suit))
+        else:
+            print('King of {}'.format(self.suit))
 
 
 class Collection(object):
@@ -18,7 +27,7 @@ class Collection(object):
 
     def show(self):
         for card in self.cards:
-            print('{} of {}'.format(card.value, card.suit))
+            card.show()
 
     def shuffle(self):
         random.shuffle(self.cards)
