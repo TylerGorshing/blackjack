@@ -108,7 +108,11 @@ class Player(object):
             self.name, self.hand.value))
         self.hasHadTurn = True
 
-    def turn(self):
+    def turn(self, deck):
+        if self.hasHadTurn:
+            print('{} has already had their turn.'.format(self.name))
+            pass
+
         print("{}'s hand:".format(self.name))
         self.hand.show()
         print("{}'s hand value is {}".format(self.name, self.hand.value))
@@ -116,11 +120,11 @@ class Player(object):
         while not self.hasHadTurn and self.hand.value <= 21:
             print('What would {} like to do? Hit or Stay?'.format(self.name))
             if input().strip().lower() == 'hit':
-                self.hit()
+                self.hit(deck)
             elif input().strip().lower() == 'stay':
                 self.stay()
             else:
-                print("Please enter 'hit' or 'stay'")
+                print("Please enter 'Hit' or 'Stay'")
 
         if self.hand.value > 21:
             print('{} has busted!'.format(self.name))
@@ -147,7 +151,7 @@ class Dealer(Player):
 
     def turn(self, deck):
         if self.hasHadTurn:
-            print('The Deal has already had thier turn. The game is over.')
+            print('The Dealer has already had thier turn. The game is over.')
             pass
 
         self.showHiddenCard()
@@ -168,29 +172,44 @@ class BlackJackGame(object):
 
     def __init__(self, *players):
 
-        self.player = player
+        self.players = players
         self.dealer = Dealer()
-
-        self.player.hand = []
 
         self.deck = Deck()
         self.deck.shuffle()
 
-        self.player.deck = self.deck
-        self.dealer.deck = self.deck
-
         self.deal()
+        self.playerTurns()
+        self.dealer.turn()
+        self.outcome()
 
     def deal(self):
 
-        self.dealer.draw(self.deck, 2)
-        self.player.draw(self.deck, 2)
+        self.dealer.draw(self.deck, number_of_cards=2)
+        for player in self.players:
+            player.draw(self.deck, number_of_cards=2)
 
-        print('Dealer:')
+        print('The Dealer:')
         self.dealer.showHand()
 
-        print(self.player.name + ':')
-        self.player.showHand()
+        for player in self.players:
+            print('{} with a hand value of {}:'.format(
+                player.name, player.hand.value))
+            player.showHand()
 
-        print("{}'s hand is currently {}".format(
-            self.player.name, self.player.handValue))
+    def playerTurns(self):
+        for player in self.players:
+            player.turn()
+
+    def outcome():
+        print('Results:')
+
+        for player in self.players:
+            if player.hand.value > 21:
+                print('{} busted.'.format(player.name))
+            elif dealer.hand.value > 21:
+                print('{} has beat the dealer'.format(player.name))
+            elif deal.hand.value > player.hand.value:
+                print('{} has lost'.format(player.name))
+            else:
+                print('{} has won!'.format(player.name)
