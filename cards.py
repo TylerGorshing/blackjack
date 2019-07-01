@@ -32,6 +32,12 @@ class Collection(object):
     def shuffle(self):
         random.shuffle(self.cards)
 
+    def addCard(self, card):
+        self.cards.append(card)
+
+    def removeCard(self):
+        return self.cards.pop(0)
+
     @property
     def size(self):
         return len(self.cards)
@@ -68,19 +74,35 @@ class Hand(Collection):
 
 
 class Player(object):
-    def __init__(self, name):
 
+    def __init__(self, name):
         self.hand = Hand()
         self.name = name
         self.hasHadTurn = False
 
-    def draw(self, deck, number_of_cards):
+    def draw(self, collection, hand=self.hand, number_of_cards=1):
         for i in range(number_of_cards):
-            self.hand.append(deck.draw())
+            hand.addCard(collection.removeCard())
 
-    def showHand(self):
-        for card in self.hand:
-            print('{} of {}'.format(card.value, card.suit))
+    def showHand(self, hand=self.hand):
+        for card in hand.cards:
+            card.show()
+
+    def hit(self, deck, hand=self.hand):
+        if self.hasHadTurn:
+            print('{} has already had thier turn.'.format(self.name))
+        else:
+            self.draw(deck, hand)
+            self.showHand()
+            print("{}'s hand is {}".format(self.name, self.handValue))
+
+        if self.hand.value > 21:
+            print('{} has busted!'.format(self.name))
+            self.hasHadTurn = True
+
+    def stay(self):
+        print('{} stays with a value of {}'.format(self.name, self.hand.value))
+        self.hasHadTurn = True
 
 
 class BlackJackPlayer(Player):
