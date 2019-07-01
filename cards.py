@@ -38,6 +38,9 @@ class Collection(object):
     def removeCard(self):
         return self.cards.pop(0)
 
+    def discard(self):
+        self.cards = []
+
     @property
     def size(self):
         return len(self.cards)
@@ -105,58 +108,10 @@ class Player(object):
         self.hasHadTurn = True
 
 
-class BlackJackPlayer(Player):
-    def __init__(self, name):
-        Player.__init__(self, name)
-
-    @property
-    def handValue(self):
-        valueList = [10 if card.value >
-                     10 else card.value for card in self.hand]
-        handValue = sum(valueList)
-
-        while valueList.count(1) > 0 and (21 - handValue) >= 10:
-            valueList[valueList.index(1)] = 11
-            handValue += 10
-
-        return handValue
-
-    def hit(self):
-        if self.hasHadTurn:
-            print('{} has already had thier turn.'.format(self.name))
-            return None
-
-        if self.handValue <= 21:
-            self.draw(self.deck, 1)
-            self.showHand()
-
-        print("{}'s hand is {}".format(self.name, self.handValue))
-
-        if self.handValue > 21:
-            print('{} has busted!'.format(self.name))
-            self.hasHadTurn = True
-
-    def stay(self):
-        self.hasHadTurn = True
-
-
-class BlackJackDealer(Player):
-
-    def __init__(self, name):
-        Player.__init__(self, name)
-        self.hiddenCard = True
-
-    @property
-    def handValue(self):
-        valueList = [10 if card.value >
-                     10 else card.value for card in self.hand]
-        handValue = sum(valueList)
-
-        while valueList.count(1) > 0 and (21 - handValue) >= 10:
-            valueList[valueList.index(1)] = 11
-            handValue += 10
-
-        return handValue
+class Dealer(Player):
+    def __init__(self):
+        Player.__init__(self, 'The Dealer')
+        hiddenCard = True
 
     def showHand(self):
         if self.hiddenCard:
@@ -172,20 +127,20 @@ class BlackJackDealer(Player):
             self.hiddenCard = False
         self.showHand()
 
-    def turn(self):
+    def turn(self, deck):
         if self.hasHadTurn:
-            print('The Deal has already had thier turn.')
+            print('The Deal has already had thier turn. The game is over.')
             pass
 
         self.showHiddenCard()
 
-        while self.handValue < 17:
-            self.draw(self.deck, 1)
+        while self.hand.value < 17:
+            self.hit(deck)
             self.showHand()
 
-        print("{}'s hand is {}".format(self.name, self.handValue))
+        print("{}'s hand is {}".format(self.name, self.hand.value))
 
-        if self.handValue > 21:
+        if self.hand.value > 21:
             print('The dealer has busted!')
 
         self.hasHadTurn = True
@@ -196,7 +151,7 @@ class BlackJackGame(object):
     def __init__(self, player):
 
         self.player = player
-        self.dealer = BlackJackDealer('Dealer')
+        self.dealer = Dealer()
 
         self.player.hand = []
 
