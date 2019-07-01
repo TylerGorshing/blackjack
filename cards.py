@@ -168,7 +168,7 @@ class Dealer(Player):
         self.hasHadTurn = True
 
 
-class BlackJackGame(object):
+class Game(object):
 
     def __init__(self, *players):
 
@@ -212,4 +212,4 @@ class BlackJackGame(object):
             elif deal.hand.value > player.hand.value:
                 print('{} has lost'.format(player.name))
             else:
-                print('{} has won!'.format(player.name)
+                print('{} has won!'.format(player.name))
