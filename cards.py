@@ -35,27 +35,14 @@ class Deck(Collection):
         self.build()
 
     def build(self):
-        for suit in ['Hearts', 'Spades', 'Diamonds', 'Clubs']:
+        for suit in ['Spades', 'Hearts', 'Diamonds', 'Clubs']:
             for value in range(1, 14):
                 self.cards.append(Card(value, suit))
-
-    def show(self):
-        for card in self.cards:
-            print('{} of {}'.format(card.value, card.suit))
-
-    def shuffle(self):
-        shuffled_deck = []
-        while len(self.cards) > 1:
-            shuffled_deck.append(self.cards.pop(
-                random.randrange(0, len(self.cards) - 1)))
-        self.cards += shuffled_deck
-
-    def draw(self):
-        return self.cards.pop()
 
 
 class Player(object):
     def __init__(self, name):
+
         self.hand = []
         self.name = name
         self.hasHadTurn = False
