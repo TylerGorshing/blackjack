@@ -11,15 +11,28 @@ class Card(object):
         print('{} of {}'.format(self.value, self.suit))
 
 
-class Deck(object):
+class Collection(object):
 
     def __init__(self):
         self.cards = []
-        self.build()
+
+    def show(self):
+        for card in self.cards:
+            print('{} of {}'.format(card.value, card.suit))
+
+    def shuffle(self):
+        random.shuffle(self.cards)
 
     @property
     def size(self):
         return len(self.cards)
+
+
+class Deck(Collection):
+
+    def __init__(self):
+        Collection.__init__(self)
+        self.build()
 
     def build(self):
         for suit in ['Hearts', 'Spades', 'Diamonds', 'Clubs']:
