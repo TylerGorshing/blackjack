@@ -77,21 +77,29 @@ class Hand(Collection):
 
 
 class Player(object):
-
     def __init__(self, name):
         self.hand = Hand()
         self.name = name
         self.hasHadTurn = False
 
-    def draw(self, collection, hand=self.hand, number_of_cards=1):
+    def draw(self, collection, hand=None, number_of_cards=1):
+        if hand is None:
+            hand = self.hand
+
         for i in range(number_of_cards):
             hand.addCard(collection.removeCard())
 
-    def showHand(self, hand=self.hand):
+    def showHand(self, hand=None):
+        if hand is None:
+            hand = self.hand
+
         for card in hand.cards:
             card.show()
 
-    def hit(self, deck, hand=self.hand):
+    def hit(self, deck, hand=None):
+        if hand is None:
+            hand = self.hand
+
         if self.hasHadTurn:
             print('{} has already had thier turn.'.format(self.name))
         else:
@@ -133,7 +141,7 @@ class Player(object):
 class Dealer(Player):
     def __init__(self):
         Player.__init__(self, 'The Dealer')
-        hiddenCard = True
+        self.hiddenCard = True
 
     def showHand(self):
         if self.hiddenCard:
@@ -201,15 +209,15 @@ class Game(object):
         for player in self.players:
             player.turn()
 
-    def outcome():
+    def outcome(self):
         print('Results:')
 
         for player in self.players:
             if player.hand.value > 21:
                 print('{} busted.'.format(player.name))
-            elif dealer.hand.value > 21:
+            elif self.dealer.hand.value > 21:
                 print('{} has beat the dealer'.format(player.name))
-            elif deal.hand.value > player.hand.value:
+            elif self.dealer.hand.value > player.hand.value:
                 print('{} has lost'.format(player.name))
             else:
                 print('{} has won!'.format(player.name))
