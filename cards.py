@@ -97,15 +97,33 @@ class Player(object):
         else:
             self.draw(deck, hand)
             self.showHand()
-            print("{}'s hand is {}".format(self.name, self.handValue))
+            print("{}'s hand value is {}".format(self.name, self.hand.value))
 
         if self.hand.value > 21:
             print('{} has busted!'.format(self.name))
             self.hasHadTurn = True
 
     def stay(self):
-        print('{} stays with a value of {}'.format(self.name, self.hand.value))
+        print('{} stays with a hand value of {}'.format(
+            self.name, self.hand.value))
         self.hasHadTurn = True
+
+    def turn(self):
+        print("{}'s hand:".format(self.name))
+        self.hand.show()
+        print("{}'s hand value is {}".format(self.name, self.hand.value))
+
+        while not self.hasHadTurn and self.hand.value <= 21:
+            print('What would {} like to do? Hit or Stay?'.format(self.name))
+            if input().strip().lower() == 'hit':
+                self.hit()
+            elif input().strip().lower() == 'stay':
+                self.stay()
+            else:
+                print("Please enter 'hit' or 'stay'")
+
+        if self.hand.value > 21:
+            print('{} has busted!'.format(self.name))
 
 
 class Dealer(Player):
@@ -115,12 +133,12 @@ class Dealer(Player):
 
     def showHand(self):
         if self.hiddenCard:
-            secretCard = self.hand.pop()
+            secretCard = self.hand.pop(0)
 
         Player.showHand(self)
 
         if self.hiddenCard:
-            self.hand.append(secretCard)
+            self.hand.inster(0, secretCard)
 
     def showHiddenCard(self):
         if self.hiddenCard:
@@ -148,7 +166,7 @@ class Dealer(Player):
 
 class BlackJackGame(object):
 
-    def __init__(self, player):
+    def __init__(self, *players):
 
         self.player = player
         self.dealer = Dealer()
