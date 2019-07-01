@@ -62,7 +62,7 @@ class Hand(Collection):
 
         while valueList.count(1) > 0 and (21 - handValue) >= 10:
             valueList[valueList.index(1)] = 11
-            handValue += 10
+            handValue = sum(valueList)
 
         return handValue
 
@@ -70,7 +70,7 @@ class Hand(Collection):
 class Player(object):
     def __init__(self, name):
 
-        self.hand = []
+        self.hand = Hand()
         self.name = name
         self.hasHadTurn = False
 
