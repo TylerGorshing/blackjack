@@ -40,6 +40,24 @@ class Deck(Collection):
                 self.cards.append(Card(value, suit))
 
 
+class Hand(Collection):
+
+    def __init__(self):
+        Collection.__init__(self)
+
+    @property
+    def value(self):
+        valueList = [10 if card.value > 10
+                     else card.value for card in self.hand]
+        handValue = sum(valueList)
+
+        while valueList.count(1) > 0 and (21 - handValue) >= 10:
+            valueList[valueList.index(1)] = 11
+            handValue += 10
+
+        return handValue
+
+
 class Player(object):
     def __init__(self, name):
 
