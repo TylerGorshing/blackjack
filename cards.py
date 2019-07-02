@@ -66,7 +66,7 @@ class Hand(Collection):
     @property
     def value(self):
         valueList = [10 if card.value > 10
-                     else card.value for card in self.hand]
+                     else card.value for card in self.cards]
         handValue = sum(valueList)
 
         while valueList.count(1) > 0 and (21 - handValue) >= 10:
@@ -108,7 +108,6 @@ class Player(object):
             print("{}'s hand value is {}".format(self.name, self.hand.value))
 
         if self.hand.value > 21:
-            print('{} has busted!'.format(self.name))
             self.hasHadTurn = True
 
     def stay(self):
@@ -119,7 +118,7 @@ class Player(object):
     def turn(self, deck):
         if self.hasHadTurn:
             print('{} has already had their turn.'.format(self.name))
-            pass
+            return None
 
         print("{}'s hand:".format(self.name))
         self.hand.show()
@@ -127,15 +126,20 @@ class Player(object):
 
         while not self.hasHadTurn and self.hand.value <= 21:
             print('What would {} like to do? Hit or Stay?'.format(self.name))
-            if input().strip().lower() == 'hit':
+            move = input().strip().lower()
+            if move == 'hit':
                 self.hit(deck)
-            elif input().strip().lower() == 'stay':
+            elif move == 'stay':
                 self.stay()
             else:
                 print("Please enter 'Hit' or 'Stay'")
 
         if self.hand.value > 21:
             print('{} has busted!'.format(self.name))
+
+    def reset(self):
+        self.hand.discard()
+        self.hasHadTurn = False
 
 
 class Dealer(Player):
@@ -145,12 +149,12 @@ class Dealer(Player):
 
     def showHand(self):
         if self.hiddenCard:
-            secretCard = self.hand.pop(0)
+            secretCard = self.hand.cards.pop(0)
 
         Player.showHand(self)
 
         if self.hiddenCard:
-            self.hand.inster(0, secretCard)
+            self.hand.cards.insert(0, secretCard)
 
     def showHiddenCard(self):
         if self.hiddenCard:
@@ -160,41 +164,49 @@ class Dealer(Player):
     def turn(self, deck):
         if self.hasHadTurn:
             print('The Dealer has already had thier turn. The game is over.')
-            pass
+            return None
 
+        print("{}'s hand with a value of {}:".format(self.name, self.hand.value))
         self.showHiddenCard()
 
         while self.hand.value < 17:
+            print('{} hits.'.format(self.name))
             self.hit(deck)
-            self.showHand()
-
-        print("{}'s hand is {}".format(self.name, self.hand.value))
 
         if self.hand.value > 21:
             print('The dealer has busted!')
 
-        self.hasHadTurn = True
+        self.stay()
 
 
 class Game(object):
 
     def __init__(self, *players):
-
         self.players = players
         self.dealer = Dealer()
-
         self.deck = Deck()
-        self.deck.shuffle()
 
+        self.round()
+
+    def round(self):
+        self.playerDiscards()
         self.deal()
         self.playerTurns()
-        self.dealer.turn()
+        self.dealer.turn(self.deck)
         self.outcome()
+        self.resetPlayers()
+
+    def playerDiscards(self):
+        for player in self.players:
+            player.hand.discard()
 
     def deal(self):
 
+        self.deck.shuffle()
+
         self.dealer.draw(self.deck, number_of_cards=2)
         for player in self.players:
+            player.hand.discard()
             player.draw(self.deck, number_of_cards=2)
 
         print('The Dealer:')
@@ -207,7 +219,7 @@ class Game(object):
 
     def playerTurns(self):
         for player in self.players:
-            player.turn()
+            player.turn(self.deck)
 
     def outcome(self):
         print('Results:')
@@ -221,3 +233,26 @@ class Game(object):
                 print('{} has lost'.format(player.name))
             else:
                 print('{} has won!'.format(player.name))
+
+    def resetPlayers(self):
+        for player in self.players:
+            player.reset()
+        self.dealer.reset()
+
+
+def main():
+    alice = Player('Alice')
+    bob = Player('Bob')
+    game = Game(alice, bob)
+
+    while True:
+        print('Another round? Y/N')
+        answer = input().strip().lower()
+        if answer == 'y':
+            game.round()
+        else:
+            break
+
+
+if __name__ == '__main__':
+    main()
