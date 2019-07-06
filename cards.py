@@ -2,12 +2,26 @@ import random
 
 
 class Card(object):
+    """A class of playing cards"""
 
     def __init__(self, value, suit):
+        """
+        The constructor for the Card class.
+
+        Parameters
+        ----------
+        value : int
+            The value of a card. 1 is Ace. 11 is Jack. 12 is Queen. 13 is King.
+
+        suit : str
+            The suit of the card. Generally 'Spades', 'Hearts', 'Diamonds', or 'Clubs'.
+        """
         self.value = value
         self.suit = suit
 
     def show(self):
+        '''Prints the value and suit of a Card.'''
+
         if self.value == 1:
             print('Ace of {}'.format(self.suit))
         elif self.value < 11:
@@ -21,6 +35,7 @@ class Card(object):
 
 
 class Collection(object):
+    """A collection of cards to be used as a deck or a players hand."""
 
     def __init__(self):
         self.cards = []
