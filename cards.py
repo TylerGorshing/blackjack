@@ -4,7 +4,7 @@ import random
 class Card(object):
     """A class of playing cards"""
 
-    def __init__(self, value, suit):
+    def __init__(self, value: int, suit: str):
         """
         The constructor for the Card class.
 
@@ -20,25 +20,25 @@ class Card(object):
         self.suit = suit
 
     def show(self):
-        '''Prints the value and suit of a Card.'''
+        '''Prints the value and suit of the Card object.'''
 
         if self.value == 1:
-            print('Ace of {}'.format(self.suit))
+            print(f'Ace of {self.suit}')
         elif self.value < 11:
-            print('{} of {}'.format(self.value, self.suit))
+            print(f'{self.value} of {self.suit}')
         elif self.value == 11:
-            print('Jack of {}'.format(self.suit))
+            print(f'Jack of {self.suit}')
         elif self.value == 12:
-            print('Queen of {}'.format(self.suit))
+            print(f'Queen of {self.suit}')
         else:
-            print('King of {}'.format(self.suit))
+            print(f'King of {self.suit}')
 
 
 class Collection(object):
     '''The parent class for a deck of cards or a player's hand.'''
 
     def __init__(self):
-        '''Makes an empty container of caards.'''
+        '''Initializes the collection object with an empty container of cards.'''
 
         self.cards = []
 
@@ -53,21 +53,21 @@ class Collection(object):
 
         random.shuffle(self.cards)
 
-    def addCard(self, card):
+    def addCard(self, card: Card):
         '''Adds a given card to the collection.
 
-        The Method can be used long with the removeCard method to draw a card and add it to a hand.
+        The Method can be used long with the removeCard() method to draw a card and add it to a hand.
 
         Parameters:
         -----------
 
-            card:
+            card: Card object
                 The card object to be added to the collection.
         '''
 
         self.cards.append(card)
 
-    def removeCard(self):
+    def removeCard(self) -> Card:
         '''Removes a card object from a collection and returs that card.'''
 
         return self.cards.pop(0)
@@ -78,7 +78,7 @@ class Collection(object):
         self.cards = []
 
     @property
-    def size(self):
+    def size(self) -> int:
         ''' A property that returns the number of cards in the collection.'''
 
         return len(self.cards)
@@ -87,7 +87,8 @@ class Collection(object):
 class Deck(Collection):
     ''' A deck of standard playing cards.
 
-    The deck consists of 52 card objects with the standard suits and values. This can be used as a deck of cards to play various games.
+    The deck consists of 52 card objects with the standard suits and values.
+    This can be used as a deck of cards to play various games.
 
     Inharets from the Collection Class.'''
 
@@ -96,7 +97,7 @@ class Deck(Collection):
 
         No parameters. Builds a deck of card in asscending order. The order of the suits is Spade, Hearts, Diamonds, and Clubs.
         '''
-        Collection.__init__(self)
+        super().__init__()
         self.build()
 
     def build(self):
@@ -118,13 +119,16 @@ class Hand(Collection):
     def __init__(self):
         '''Initializes the hand from the Collection class.'''
 
-        super().__init__(self)
+        super().__init__()
 
     @property
-    def value(self):
-        '''A property that returns the value of the hand according the the rules of blackjack.
+    def value(self) -> int:
+        '''
+        A property that returns the value of the hand according the the rules of blackjack.
 
-        The method takes into conideration the different possible values of an ace and the values of Jacks, Kings, and Queens.'''
+        The method takes into consideration the different possible
+        values of an ace and the values of Jacks, Kings, and Queens.
+        '''
 
         valueList = [10 if card.value > 10
                      else card.value for card in self.cards]
@@ -138,47 +142,56 @@ class Hand(Collection):
 
 
 class Player(object):
-    '''A blackjack player.
+    '''
+    A blackjack player.
 
-    The is the parent class for a human player and the dealer. It includes methods and attributes relevents to both kinds of players.'''
+    The is the parent class for a human player and the dealer. It includes
+    methods and attributes relevents to both kinds of players.
+    '''
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         '''Initializes the player object.
+
+        Parameters:
+        -----------
+
+            name: str
+                The player's name.
 
         Attributes:
         -----------
 
-        self.hand:
-            A Hand object to hold the player's cards.
+            self.hand:
+                A Hand object to hold the player's cards.
 
-        self.name:
-            The name of the player.
+            self.name: str
+                The name of the player.
 
-        self.hasHadTurn:
-            Boolean - show if the player has had thier turn in a round of blackjack
+            self.hasHadTurn:
+                Boolean - show if the player has had thier turn in a round of blackjack
         '''
 
         self.hand = Hand()
         self.name = name
         self.hasHadTurn = False
 
-    def draw(self, collection, hand=None, number_of_cards=1):
+    def draw(self, collection: Collection, hand: Hand = None, number_of_cards: int = 1):
         '''
         Draws a card from a specified collection object and adds it to the players hand.
 
         Parameters:
         -----------
 
-        collection:
-            The collection to draw from. Generally, the Deck object being used in the game.
+            collection:
+                The collection to draw from. Generally, the Deck object being used in the game.
 
-        hand = None:
-            Specifies which hand the player should add the drawn cards to.
-            Using None, defaults to the players only hand.
+            hand = None:
+                Specifies which hand the player should add the drawn cards to.
+                Using None, defaults to the players only hand.
 
-        number_of_cards = 1:
-            Specifies the number of cards to be drawn from the given collection. 
-            Defaults to 1 card.
+            number_of_cards = 1:
+                Specifies the number of cards to be drawn from the given collection.
+                Defaults to 1 card.
         '''
         if hand is None:
             hand = self.hand
@@ -186,7 +199,7 @@ class Player(object):
         for i in range(number_of_cards):
             hand.addCard(collection.removeCard())
 
-    def showHand(self, hand=None):
+    def showHand(self, hand: Hand = None):
         '''Prints all the cards in the players hand.
 
         Parameters:
@@ -203,10 +216,10 @@ class Player(object):
         for card in hand.cards:
             card.show()
 
-    def hit(self, deck, hand=None):
+    def hit(self, deck: Deck, hand: Hand = None):
         '''The "hit" action in a game of blackjack.
 
-        Draws a card from the specified deck and adds it to the specified hand. Prints a summary 
+        Draws a card from the specified deck and adds it to the specified hand. Prints a summary
         and results of the action including all the cards in the player's hand and the total value of the hand.
 
         Parameters:
@@ -225,7 +238,7 @@ class Player(object):
         if self.hasHadTurn:  # checks to see if the player has had their turn.
             print('{} has already had thier turn.'.format(self.name))
         else:
-            self.replacementDraw(deck, hand)
+            self.draw(deck, hand)
             self.showHand()
             print("{}'s hand value is {}".format(
                 self.name, self.hand.value))
@@ -260,19 +273,18 @@ class HumanPlayer(Player):
     Inheriates from the Player class.
     '''
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         '''
         Initalizes the HumanPlayer.
 
         Parameters:
         -----------
-
-        name: str
-            The name of the human playing the game.
+            name: str
+                The name of the human playing the game.
         '''
         super().__init__(name)
 
-    def turn(self, deck):
+    def turn(self, deck: Deck):
         '''
         A method allowing the user to take thier turn using the terminal.
 
@@ -280,33 +292,34 @@ class HumanPlayer(Player):
         turn() prints information to the terminal for the user to make game decisions.
 
         Parameters:
-        deck: Deck object
-            The deck being used for the game of blackjack being played.
+        -----------
+            deck: Deck object
+                The deck being used for the game of blackjack being played.
 
         User Input:
         -----------
-        This method askes the user for input. 
+            This method askes the user for input.
 
-        hit:
-            Shows the user has decicded to hit.
-            Calls the hit() method in the parents class. 
+            hit:
+                Shows the user has decicded to hit.
+                Calls the hit() method in the parents class.
 
-        stay:
-            Shows the user has decided to stay.
-            Calls the stay() method in the parent class.
+            stay:
+                Shows the user has decided to stay.
+                Calls the stay() method in the parent class.
         '''
 
         if self.hasHadTurn:  # checks to see if the user has had their turn.
-            print('{} has already had their turn.'.format(self.name))
+            print(f'{self.name} has already had their turn.')
             return None
 
-        print("{}'s hand:".format(self.name))
+        print(f"{self.name}'s hand:")
         self.hand.show()
-        print("{}'s hand value is {}".format(self.name, self.hand.value))
+        print(f"{self.name}'s hand value is {self.hand.value}")
 
         # Allows the user to continue until choose "stay" or they bust.
         while not self.hasHadTurn and self.hand.value <= 21:
-            print('What would {} like to do? Hit or Stay?'.format(self.name))
+            print(f'What would {self.name} like to do? Hit or Stay?')
             move = input().strip().lower()
             if move == 'hit':
                 self.hit(deck)
@@ -316,13 +329,15 @@ class HumanPlayer(Player):
                 print("Please enter 'Hit' or 'Stay'")  # Humans are dumb.
 
         if self.hand.value > 21:
-            print('{} has busted!'.format(self.name))
+            print(f'{self.name} has busted!')
 
 
 class Dealer(Player):
-    '''The dealer for a game of blackjack.
+    '''
+    The dealer for a game of blackjack.
 
-    The dealer's name is 'The Dealer'. A Dealer object also has a hidden card that the player cannot see and a special turn sequence 
+    The dealer's name is 'The Dealer'. A Dealer object also has a hidden
+    card that the player cannot see and a special turn sequence
     as defined by the rules of blackjack.
 
     Inherits fro the Player class.
@@ -334,12 +349,11 @@ class Dealer(Player):
 
         Atrributes:
         -----------
+            self.name is always 'The Dealer'
 
-        Dealer.name is always 'The Dealer'
-
-        self.hiddenCard: bool
-            True if a card is hidden from the player. When the dealer starts their turn, 
-            the dealer flips the card, and self.hiddenCard is changed to false.
+            self.hiddenCard: bool
+                True if a card is hidden from the player. When the dealer starts their turn,
+                the dealer flips the card, and self.hiddenCard is changed to false.
         '''
         Player.__init__(self, 'The Dealer')
         self.hiddenCard = True
@@ -356,7 +370,8 @@ class Dealer(Player):
             self.hand.cards.insert(0, secretCard)
 
     def showHiddenCard(self):
-        '''Reveals the deal's hidden card.
+        '''
+        Reveals the deal's hidden card.
 
         This changes self.hiddenCard to False and prints all the dealer's cards to the terminal.
         '''
@@ -365,8 +380,9 @@ class Dealer(Player):
             self.hiddenCard = False
         self.showHand()
 
-    def turn(self, deck):
-        '''The sequence of actions for the dealer's turn.
+    def turn(self, deck: Deck):
+        '''
+        The sequence of actions for the dealer's turn.
 
         This follows the standard rules of blackjack:
         The dealer reveals their hidden card. Then the dealer hits below 17, and stays at 17 or above.
@@ -381,7 +397,7 @@ class Dealer(Player):
         self.showHiddenCard()
 
         while self.hand.value < 17:  # The dealer must hit if their hand value is less than 17
-            print('{} hits.'.format(self.name))
+            print(f'{self.name} hits.')
             self.hit(deck)
 
         if self.hand.value > 21:
@@ -398,27 +414,25 @@ class Game(object):
     a group of player, a dealer, a deck, a game sequence, and a summary at the end of the game.
     '''
 
-    def __init__(self, *players):
+    def __init__(self, *players: HumanPlayer):
         '''
-        Initializes the Game object. 
+        Initializes the Game object.
 
         Takes the players and creats a Dealer object and a Deck object.
 
         Parameters:
         -----------
-
-        *players: HumanPlayer objects
-            Accepts any number of human players for a game.
-            Caution! A Game object only creats a single Deck object with 52 cards. Only a handful of plays can play before the deck runs out of cards.
+            *players: HumanPlayer objects
+                Accepts any number of human players for a game.
+                Caution! A Game object only creats a single Deck object with 52 cards. Only a handful of plays can play before the deck runs out of cards.
 
         Attriburtes:
         ------------
+            self.dealer: Dealer object
+                The dealer for the game of blackjack. The dealer has a hand with a hiden card and takes thier own turn.
 
-        self.dealer: Dealer object
-            The dealer for the game of blackjack. The dealer has a hand with a hiden card and takes thier own turn.
-
-        self.deck: Deck object
-            A standard 52 card deck that is used to deal cards to the players.
+            self.deck: Deck object
+                A standard 52 card deck that is used to deal cards to the players.
         '''
 
         self.players = players
@@ -440,9 +454,10 @@ class Game(object):
         self.resetPlayers()
 
     def playerDiscards(self):
-        '''Empties all the human players' hands.
+        '''
+        Empties all the human players' hands.
 
-        This is called at the begining and end of each 
+        This is called at the begining and end of each
         round to ensure the players start with an empty hand.
         '''
 
@@ -453,14 +468,14 @@ class Game(object):
         '''
         Shuffles the deck and deals the cards to the players including the dealer.
 
-        Once the game is finished dealing, a summary of all the visible 
-        cards (ALL the human players's cards and one of the dealer's cards) are 
+        Once the game is finished dealing, a summary of all the visible
+        cards (ALL the human players's cards and one of the dealer's cards) are
         printed along with the value of each human's hand.
 
         Note:
         -----
-            This DOES NOT follow standard blackjack deal order. In this case, 
-            the dealer is delt two Card objects. Then, each player is delt two 
+            This DOES NOT follow standard blackjack deal order. In this case,
+            the dealer is delt two Card objects. Then, each player is delt two
             card objects in the order they intered the game.
         '''
 
@@ -469,11 +484,11 @@ class Game(object):
         self.dealer.draw(self.deck, number_of_cards=2)
 
         for player in self.players:
-            player.hand.discard() # For extra redundency or something.
+            player.hand.discard()  # For extra redundency or something.
             player.draw(self.deck, number_of_cards=2)
 
         print('The Dealer:')
-        self.dealer.showHand() # Shows only the visible card.
+        self.dealer.showHand()  # Shows only the visible card.
 
         for player in self.players:
             print('{} with a hand value of {}:'.format(
@@ -496,13 +511,13 @@ class Game(object):
 
         for player in self.players:
             if player.hand.value > 21:
-                print('{} busted.'.format(player.name))
+                print(f'{player.name} busted.')
             elif self.dealer.hand.value > 21:
-                print('{} has beat the dealer'.format(player.name))
+                print(f'{player.name} has beat the dealer')
             elif self.dealer.hand.value > player.hand.value:
-                print('{} has lost'.format(player.name))
+                print(f'{player.name} has lost')
             else:
-                print('{} has won!'.format(player.name))
+                print(f'{player.name} has won!')
 
     def resetPlayers(self):
         '''
@@ -515,9 +530,19 @@ class Game(object):
 
 
 def main():
-    alice = Player('Alice')
-    bob = Player('Bob')
-    game = Game(alice, bob)
+    print('How many human players are playing?')
+    number = int(input())
+
+    players = []
+
+    for i in range(number):
+        print(f'What is the name of player {i+1}?')
+        name = input()
+        players.append(HumanPlayer(name))
+
+    game = Game(*players)
+
+    game.round()
 
     while True:
         print('Another round? Y/N')
