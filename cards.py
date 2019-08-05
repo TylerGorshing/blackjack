@@ -32,8 +32,16 @@ class Card():
 
     def __init__(self, value: int, suit: str):
 
-        self.value = value
-        self.suit = suit
+        self._value = lambda self: value
+        self._suit = lambda self: suit
+
+    @property
+    def value(self):
+        return self._value(self)
+
+    @property
+    def suit(self):
+        return self._suit(self)
 
     def show(self):
         '''Prints the value and suit of the Card object.'''
@@ -129,6 +137,13 @@ class Collection():
         ''' int : The number of cards in `cards`.'''
 
         return len(self.cards)
+
+    def __len__(self):
+        return len(self.cards)
+
+    def __add__(self, other):
+        self.cards += other.cards
+        return self
 
 
 class Deck(Collection):
