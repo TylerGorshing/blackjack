@@ -205,7 +205,7 @@ class Player():
     A blackjack player.
 
     The is the parent class for a human player and the dealer. It includes
-    methods and attributes relevents to both kinds of players.
+    methods and attributes relevent to both kinds of players.
 
     Parameters
     -----------
@@ -225,11 +225,12 @@ class Player():
             If False, the player has NOT had their turn yet.
     '''
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, summary=True):
 
         self.hand = Hand()
         self.name = name
         self.had_turn = False
+        self.summary = summary
 
     def draw(self, collection, number_of_cards: int = 1):
         '''
@@ -267,7 +268,7 @@ class Player():
         for card in self.hand.cards:
             card.show()
 
-    def hit(self, deck, summary=True):
+    def hit(self, deck):
         '''The "hit" action in a game of blackjack.
 
         Draws a card from the specified deck and adds it to the specified hand. Prints a summary
@@ -280,39 +281,28 @@ class Player():
         deck:
             The Deck object the player will draw from. Generally,
             the deck object being used in the game of blackjack the player is playing.
-
-        summary: bool
-            Defaults to true.
-            If summer is true, a statement to the terminal for the user.
         '''
 
         if self.had_turn:  # checks to see if the player has had their turn.
-            if summary:
-                print(f'{self.name} has already had thier turn.')
+            if self.summary:
+                print(f'{self.name} has already had thier turn.', '\n')
         else:
             self.draw(deck)
-            if summary:
+            if self.summary:
                 self.show_hand()
-                print(f"{self.name}'s hand value is {self.hand.value}")
+                print(f"{self.name}'s hand value is {self.hand.value}", '\n')
 
         if self.hand.value > 21:  # Checks to see if the player has busted.
             # If they player busts, their turn is ended.
             self.had_turn = True
 
-    def stay(self, summary=True):
+    def stay(self):
         '''
         The "stay" action in a game of blackjack ending the player's turn.
+        '''
 
-        Parameters:
-        -----------
-
-        summary: bool
-            Defaults to true.
-            If summer is true, a statement to the terminal for the user.
-            '''
-
-        if summary:
-            print(f'{self.name} stays with a hand value of {self.hand.value}')
+        if self.summary:
+            print(f'{self.name} stays with a hand value of {self.hand.value}', '\n')
         self.had_turn = True
 
     def reset(self):
@@ -344,7 +334,7 @@ class HumanPlayer(Player):
 
         Parameters:
         -----------
-            deck: Deck object
+            deck : Deck object
                 The deck being used for the game of blackjack being played.
 
         User Input:
@@ -364,9 +354,10 @@ class HumanPlayer(Player):
             print(f'{self.name} has already had their turn.')
             return None
 
+        print('\n', f"\n-----{self.name}'s Turn-----")
         print(f"{self.name}'s hand:")
         self.hand.show()
-        print(f"{self.name}'s hand value is {self.hand.value}")
+        print(f"{self.name}'s hand value is {self.hand.value}", '\n')
 
         # Allows the user to continue until choose "stay" or they bust.
         while not self.had_turn and self.hand.value <= 21:
@@ -377,7 +368,7 @@ class HumanPlayer(Player):
             elif move == 'stay':
                 self.stay()
             else:
-                print("Please enter 'Hit' or 'Stay'")  # Humans are dumb.
+                print("Please enter 'Hit' or 'Stay'.")  # Humans are dumb.
 
         if self.hand.value > 21:
             print(f'{self.name} has busted!')
@@ -431,6 +422,12 @@ class Dealer(Player):
         if self.hidden_card:
             self.hand.cards.insert(0, secret_card)
 
+    @property
+    def up_card(self):
+        '''Returns the first card that is visable to other players.'''
+
+        return self.hand.cards[1]
+
     def show_hidden_card(self):
         '''
         Reveals the deal's hidden card.
@@ -459,19 +456,20 @@ class Dealer(Player):
             return None
 
         if self.summary:
+            print(f"-----{self.name}'s Turn-----")
             print(f"{self.name}'s hand with a value of {self.hand.value}:")
             self.show_hidden_card()
 
         while self.hand.value < 17:  # The dealer must hit if their hand value is less than 17
             if self.summary:
                 print(f'{self.name} hits.')
-            self.hit(deck, summary=self.summary)
+            self.hit(deck)
 
         if self.hand.value > 21:
             if self.summary:
-                print('The dealer has busted!')
+                print('The dealer has busted!', '\n')
 
-        self.stay(summary=self.summary)
+        self.stay()
 
 
 class Game():
@@ -479,7 +477,7 @@ class Game():
     A game of blackjack.
 
     This is the Game object. It has everything needed for a game of blackjack:
-    a group of player, a dealer, a deck, a game sequence, and a summary at the end of the game.
+    a group of players, a dealer, a deck, a game sequence, and a summary at the end of the game.
     '''
 
     def __init__(self, *players, summary=True):
@@ -493,7 +491,7 @@ class Game():
             *players: HumanPlayer objects
                 Accepts any number of human players for a game.
                 Caution! A Game object only creats a single Deck object with
-                52 cards. Only a handful of plays can play before the deck runs out of cards.
+                52 cards. Only a handful of players can play before the deck runs out of cards.
 
             summary: bool
                 Defaults to true.
@@ -525,8 +523,8 @@ class Game():
 
         This method is simply calls other class methods in game order.
         '''
-
-        self.players_discard()
+        if self.summary:
+            print('\n', '-----New Game-----')
         self.deal()
         self.player_turns()
         self.dealer.turn(self.deck)
@@ -538,8 +536,8 @@ class Game():
         '''
         Empties all the human players' hands.
 
-        This is called at the begining and end of each
-        round to ensure the players start with an empty hand.
+        This is called at the end of each
+        round to ensure the players empty their hand.
         '''
 
         for player in self.players:
@@ -571,11 +569,12 @@ class Game():
         if self.summary:
             print('The Dealer:')
             self.dealer.show_hand()  # Shows only the visible card.
+            print('\n')
 
-        for player in self.players:
-            if self.summary:
+            for player in self.players:
                 print(f'{player.name} with a hand value of {player.hand.value}:')
                 player.show_hand()
+                print('\n')
 
     def player_turns(self):
         '''
