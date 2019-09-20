@@ -38,11 +38,17 @@ class Card():
 
     @property
     def value(self):
-        return self._value
+        if not self._hiden:
+            return self._value
+        else:
+            return None
 
     @property
     def suit(self):
-        return self._suit
+        if not self._hidden:
+            return self._suit
+        else:
+            return None
 
     @property
     def hidden(self):
@@ -56,7 +62,11 @@ class Card():
         self._hidden = hidden
         return self
 
-    def setHidden(self, hidden):
+    def changeHidden(self, hidden=None):
+        if hidden is None:
+            self._hidden = not self._hidden
+            return self
+
         if hidden.__class__ == bool:
             self._hidden = hidden
             return self
@@ -208,7 +218,7 @@ class Hand(Collection):
         return hand_value
 
     @property
-    def num_aces(self):
+    def num_aces(self) -> int:
         '''int : The number of aces in a hand'''
 
         return [card.value for card in self.cards].count(1)
@@ -241,29 +251,29 @@ class Player():
 
     def __init__(self, name: str):
 
-        self.hand = Hand()
-        self.name = name
-        self.completedTurn = False
-        self.lost = False
-        self.won = False
-        self.busted = False
+        self.hand: Hand = Hand()
+        self.name: str = name
+        self.completedTurn: bool = False
+        self.lost: bool = False
+        self.won: bool = False
+        self.busted: bool = False
 
     @property
-    def hasBlackjack(self):
+    def hasBlackjack(self) -> bool:
         if self.hand.value == 21:
             return True
         else:
             return False
 
-    def showHand(self):
+    def showHand(self) -> None:
         for card in self.hand.cards:
             card.hidden = False
 
-    def hideHand(self):
+    def hideHand(self) -> None:
         for card in self.hand.cards:
             card.hidden = True
 
-    def newSetup(self):
+    def newSetup(self) -> None:
         '''
         Resets the player for a new game.
 
@@ -386,7 +396,7 @@ class Game():
             self.dealer.completedTurn = False
             self.dealer.hand.discard()
             self.dealer.hand.cards.extend(
-                [self.deck.draw().setHidden(True), self.deck.draw()])
+                [self.deck.draw().changeHidden(True), self.deck.draw()])
 
         self.deck.reset()
         self.deck.shuffle()
