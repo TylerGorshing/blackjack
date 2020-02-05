@@ -96,7 +96,7 @@ class Game():
                     player.hand.cards.append(self.deck.draw())
                     if self.summary:
                         print(
-                            f'{player.name} hits and has a hand value of {player.hand.value}')
+                            f' \n{player.name} hits and has a hand value of {player.hand.value}')
                         player.hand.show()
                     if player.hand.value > 21:  # determins if the player has busted
                         player.completedTurn, player.busted = True, True
@@ -106,7 +106,7 @@ class Game():
                     player.completedTurn = True
                     if self.summary:
                         print(
-                            f'{player.name} stays with a hand value of {player.hand.value} \n \n')
+                            f' \n{player.name} stays with a hand value of {player.hand.value} \n \n')
                 else:  # If something other than True or False is returned from the Player object
                     raise ValueError(
                         "The turn() method in the Player object should return a bool: True for hit or False for stay")
@@ -148,7 +148,7 @@ class Game():
             player.hand.show()
             print('\n')
 
-        print('\n', '\n', '----------Outsomes----------', '\n', '\n')
+        print('\n', '\n', '----------Outcome----------', '\n', '\n')
 
         playerOutcome(self.dealer)
 

@@ -122,7 +122,7 @@ class HumanPlayer(Player):
                 return False
             else:
                 # Humans can be dumb. Doesn't break the while loop
-                print('You must type "hit" or "stay".')
+                print('\nYou must type "hit" or "stay".')
 
 
 class Dealer(Player):
