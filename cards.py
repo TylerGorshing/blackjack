@@ -1,7 +1,3 @@
-'''
-A learning exercise to learn OOP in python.
-
-'''
 
 import random
 

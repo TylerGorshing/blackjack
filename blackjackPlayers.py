@@ -8,12 +8,16 @@ class Hand(Collection):
 
     Inherits from the Collection class in the cards module.'''
 
+    def __init__(self, cards=None, replacement=False):
+        super.__init__(cards=cards, replacement=replacement)
+
     @property
     def value(self) -> int:
         ''' Returns the value of a hand as determined by the rules of blackjack.'''
 
         value_list = [10 if card.value > 10  # 10, Jack, Queen, and King are all worth 10 points
                       else card.value for card in self.cards]  # Creates a list of the integer values of each card in the hand.
+
         # Adds all the values together - treats all Aces as if they're worth 1 point each
         hand_value = sum(value_list)
 
@@ -109,7 +113,7 @@ class HumanPlayer(Player):
         super().__init__(name)
 
     def turn(self) -> bool:
-        '''Defines a human player's turn. 
+        '''Defines a human player's turn.
         Returns a bool to be handled by the game program.'''
 
         while True:
