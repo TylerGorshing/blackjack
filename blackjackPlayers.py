@@ -9,7 +9,7 @@ class Hand(Collection):
     Inherits from the Collection class in the cards module.'''
 
     def __init__(self, cards=None, replacement=False):
-        super.__init__(cards=cards, replacement=replacement)
+        super().__init__(cards=cards, replacement=replacement)
 
     @property
     def value(self) -> int:
