@@ -1,6 +1,6 @@
 """Defines Blackjack players and how they take their turns including the dealer."""
 
-from cards import Collection
+from .cards import Collection
 
 
 class Hand(Collection):

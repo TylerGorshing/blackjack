@@ -1,7 +1,7 @@
 """A game of blackjack."""
 
-from cards import Deck
-from players import (
+from .cards import Deck
+from .players import (
     HumanPlayer,
     Dealer,)
 
