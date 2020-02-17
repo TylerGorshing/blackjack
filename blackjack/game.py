@@ -7,28 +7,45 @@ from .players import (
 
 
 class Game():
-    """
-    A game of blackjack.
+    """Represents a game of blackjack.
 
-    This is the Game object. It has everything needed for a game of blackjack:
-    a group of players, a dealer, a deck, a game sequence, and a summary at the end of the game.
+    To start a game of blackjack
 
     Parameters
-        ----------
-            players : HumanPlayer
-                The human players in the game. Can be an arbitrary number of players.
+    ----------
+        *players : Player or list
+            The player or list of players to play the game of blackjack.
 
-            summary : bool
-                Defaults to True
-                If true, prints of a summer of each step of the game.
+        summary : bool
+            If True (the default), the game will print a summary of what's happening in the game.
+            If False, the game will run without printing anything to the terminal.
 
-        Attributes
-        -----------
-            dealer : Dealer
-                A dealer object from the players module as the dealer of the game
+    Notes
+    -----
+        A New Game :
+            To play a game of blackjack, create a game instance by passing all player objects into the constructor,
+            then simply call the game object.
 
-            deck : Deck
-                A deck object from the cards module as the deck of cards in the game
+            Example:
+                game = Game(alice, bob) # creats a Game instance with all player objects
+                game() # starts a new game of blackjack
+
+
+        ALL players MUST have the following methods defined.
+            begin_turn()
+                This is called at the begining of a player's turn. Not all player's need to do something here, but
+                for example, the dealer needs to reveal any hidden cards at the begining of their turn.
+
+            decision()
+                This is called when the player needs to choose to hit or stay and might be called
+                several times during thier turn.
+
+                return True if the player hits
+                return False if the player stays
+
+            clean_up()
+                Called at the end of the game. Generally, the player dicards and had_turn is set to False in
+                in preparation for their turn.
     """
 
     def __init__(self, *players, summary=True):
@@ -71,11 +88,11 @@ class Game():
         # Prints a summary of the deal if _summary is True.
         if self._summary:
             self._anounce('The Dealer')
-            self._dealer.hand.info()
+            print(self._dealer.hand)
 
             for player in self._players:
                 self._anounce(f'{player.name} with {player.hand.value}')
-                player.hand.info()
+                print(player.hand)
 
     def _get_decision(self, player):
         decision = player.decision()
@@ -97,7 +114,7 @@ class Game():
         hand_value = player.hand.value
         if self._summary:
             self._anounce(f'{player.name} with {hand_value}')
-            player.hand.info()
+            print(player.hand)
 
         while hand_value <= 21:
             decision = self._get_decision(player)
@@ -106,7 +123,7 @@ class Game():
                 hand_value = player.hand.value
                 if self._summary:
                     print(f'{player.name} hits.\n')
-                    player.hand.info()
+                    print(player.hand)
                     print(f'\n{player.name} has {hand_value}.\n')
             else:
                 if self._summary:

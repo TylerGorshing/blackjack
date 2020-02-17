@@ -1,20 +1,7 @@
-#! /usr/local/bin/python3
-
-from .cards import(
-    Card,
-    Collection,
-    Deck)
-
-from .players import(
-    Hand,
-    Player,
-    HumanPlayer,
-    Dealer)
-
-from .game import Game
+from .__init__ import *
 
 
-def main():
+def play_blackjack():
     """The main function - only called if __name__ == __main__."""
 
     while True:
@@ -47,4 +34,4 @@ def main():
             break
 
 
-main()
+play_blackjack()
