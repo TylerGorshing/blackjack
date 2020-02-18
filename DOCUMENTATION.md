@@ -258,13 +258,10 @@ ALL players MUST have the following methods.
 
     This is called when the player needs to choose to hit or stay and might be called several times during thier turn.
 
-    return `True` if the player hits
-    return `False` if the player stays
-
 - `clean_up()`
 
-        Called at the end of the game. Generally, the player dicards their hand and had_turn is set to False in
-        in preparation for their turn.
+    Called at the end of the game. Generally, the player dicards their hand and had_turn is set to False in
+    in preparation for their turn.
 
 The game also assumes the following
 - Player objects have a `'name'` represented as a string
