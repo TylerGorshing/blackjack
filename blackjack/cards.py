@@ -15,7 +15,7 @@ class Card():
             suit : str
                 The suit of the card. Generally 'Spades', 'Hearts', 'Diamonds', or 'Clubs'.
 
-            is_hidden : bool or None
+            is_hidden : bool
                 If true, the card is "face down" and information about the Card can't be viewed.
                 If None (the default) is_hidden is set to False
 

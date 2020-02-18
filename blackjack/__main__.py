@@ -1,8 +1,17 @@
+"""This module is executed when the package is run as a script:
+    python3 -m blackjack # requires python 3.7 or later
+
+For more on running the program or playing a game, see the readme file.
+"""
+
 from .__init__ import *
 
 
 def play_blackjack():
-    """The main function - only called if __name__ == __main__."""
+    """This function runs when the package is run as a script from the terminal.
+    
+    python3 -m blackjack
+    """
 
     while True:
         try:
