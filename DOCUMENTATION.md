@@ -28,22 +28,16 @@ Defined in the cards module
 #### Data Attributes
 - **`value`** (int or None) - Returns the int value of the card. If `is_hidden` is True, returns None.
 - **`suit`** (str or None) - Returns the suit of the card. If `is_hidden` is True, returns None.
-- **`is_hidden`** (bool) - A repesentation of whether information about the card can be accessed. If set to True, the card is hidden or 'facedown' (no on can see the information). If False, the card is not hidden or 'faceup' and everyone can access information about the card. This attribute can only be changed with the `flip()` method.
+- **`is_hidden`** (bool) - A repesentation of whether information about the card can be accessed. If set to True, the card is hidden or 'facedown' (no one can see the information). If False, the card is not hidden or 'faceup' and everyone can access information about the card. This attribute can only be changed with the `flip()` method.
 
 #### Methods
-- **`flip()`** - Changes the value of `is_hidden` to the opposite boolean value. This is like flipping a card over (from facedown to faceup). Returns None
+- **`flip()`** - Changes the value of `is_hidden` to the opposite boolean value. This is like flipping a card over (from facedown to faceup). Returns None.
 
 #### Other Behaviors
-- **Comparison Operators** - Cards can be compared with the standard comparison operators (==, <, >, etc). Only the value of the card is used for comparisons.
-
-```
->>>Card(4, 'Spades') == Card(8, 'Spades')
-False
->>>Card(4, 'Spades') == Card(4, 'Hearts')
-True
-```
-
+- **Comparison Operators** - Cards can be compared with the standard comparison operators (`==`, `<`, `>`, etc). Only the value of the card is used for comparisons.
 - **`str()`** - Returns a string with information about the card in the form of `'{value} of {suit}'`. If `is_hidden` is True, returns the string `'This card is hidden.'` This allows a card object to be passed into the `print()` method.
+
+#### Examples
 
 ```
 >>>card_a = Card(4, 'Spades')
@@ -53,224 +47,89 @@ True
 >>>card_b = Card(12, 'Hearts')
 >>>print(card_b)
 Queen of Hearts
->>>card_b.flip() # changed is_hidden to True
+
+>>>card_b.flip() # changes is_hidden to True
 >>>print(card_b)
 This card is hidden.
+
+>>>card_c = Card(8, 'Spades')
+>>>card_a == card_b # 4 of Spades is not equal to Queen of Hearts
+False
+
+>>>card_a < card_b
+True
+
+>>>card_c = Card(4, 'Hearts')
+>>>card_a == card_c # 4 of Spades is equal to 4 of Hearts
+True
 ```
 
-## The Collection Class
 
-This class is a parent class for any object whose purpose is to hold cards, for example, a deck of playing cards or a player's hand in a card game.
+## The Collection Bass Class
+
+This class is a base class for any object whose purpose is to hold cards, for example, a deck of playing cards or a player's hand in a card game.
+
+This is the parent to the Deck and Hand classes.
 
 ### *class* `Collection(cards=None, replacement=False)`
 
-An object for a collection of cards. This is the base class for Deck and Hand.
+#### Parameters
+- **cards** (list or None) - A list of cards objects (or a single card object) to be placed in the collection at construction. If `None` (the default), then the collection object is initialized with an empty list to be filled with cards at a later time.
+- **replacement** (bool) - Determines if cards are drawn from the collection with or without replacement. If `False` (the default), then cards are drawn without replacement. Cards are drawn with replacement if `replacement` is set to `True`. This cannot be changed after the collection object has been constructed.
 
-        Parameters
-        ----------
-            cards : list or None
-                A list of card objects to be placed in the collection at construction.
-                If None (the default), the collections is empty once constructed.
+#### Methods
+- **`add(cards)`** - Adds a single card object or a list of card objects to the collection. This is similar to the `append()` method for a list. Returns None
+    Parameters
+        - **cards** (Card or list) - The card or list of cards to be added to the collection.
+- **`draw()`** - Returns a single card object from the collection.
+    If replacement is `False`, the card is removed from the collection.
+    If replacement is `True`, the card is NOT removed from the collection.
+- **`discard()`** - Removes all cards from the collection. Returns None.
+- **`hide()`** - Sets the is_hidden attribute for each card in the collection to True. Returns None.
+- **`reveal()`** - Sets the is_hidden attribute for each card in the collection to False. Returns None.
+- **`shuffle()`** - Randomizes the order of the cards in the collection - just like shuffling a deck of cards. Returns None.
 
-            replacement : bool
-                Determines if cards are drawn from the collection with replacement or without replacenemt.
-                This can only be set when a new instance is initialized. Once an instance is initialized, 
-                replacement cannot be changed.
+#### Other Behaviors
+- **Iteration** - A collection object is interable and will interate over all cards held by the collection.
+- **Concatination** (The `+` operator) - Two collection objects can be concatinated with the '+' operator. This returns a new collection.
+- **Indexing** - A collection can be indexed to acces a card at a specific index. Indexing can only access cards and cannot add or modify cards.
+- **`len()`** - Passing a collection into the `len()` method will return the number of cards in the collection.
+- **`str()`** - Passing a collection into the str() method will return a string describing every card in the collection. This allows a colletion to be passed as an argument into the `print()` method.
 
-                If False (the default), cards are drawn without replacement.
-                When the draw method is called, a card object is removed from the collection and returnd.
 
-                If True, cards are drawn with replacement.
-                When the draw method is called, a card is returned without removing the card from the collection.
+### *class* `Deck(cards=None, replacement=False)`
+A standard deck of 52 playing cards.
 
-        Methods
-        -------
-            add(cards) :
-                Adds a single card object or a list of card objects to the collection.
+This class is defined in the cards module. It extends the `Collection` class, and includes all the attributes from its parent.
 
-                Returns None
+#### Parameters
+- **cards** (list or None) - A list of cards objects (or a single card object) to be placed in the deck at construction. If `None` (the default), then the deck object is initialized with the set of 52 standard playing cards.
+- **replacement** (bool) - Determines if cards are drawn from the deck with or without replacement. If `False` (the default), then cards are drawn without replacement. Cards are drawn with replacement if `replacement` is set to `True`. This cannot be changed after the deck object has been constructed.
 
-                Parameters
-                    cards : list or Card
-                        The card or list of cards to be added to the collection.
+#### Methods
+This section only details the methods defined in the Deck class. Other supported methods are defined in the `Collection` class.
 
-            draw() :
-                Returns single card from the collection.
+- **`reset()`** - Resets the deck back to the original 52 playing cards. Returns None.
 
-                If replacement is False, the card is removed from the collection.
-                If replacement is True, the card is NOT removed from the collection.
+### *class* `Hand()`
+A player's hand in a game of blackjack. 
 
-            discard() :
-                Removes all cards from the collection.
-                Returns None
+This class is defined in the players module. It extends the `Collection` class, and includes all the attributes from its parent. For other supported methods, see the collection class.
 
-            hide() :
-                Sets the is_hidden attribute for each card in the collection to True.
-                Returns None
+#### Parameters
+The Hand class takes no parameters and is always empty at construction.
 
-            reveal() :
-                Sets the is_hidden attribute for each card in the collection to False.
-                Returns None
+#### Data Attributes
+- **`value`** (int) - The value of the hand as determined by the rules of blackjack. Face cards are woth 10 points, Aces are worth 11 or 1 point, etc. 
 
-            shuffle() :
-                Randomizes the order of the cards in the collection.
-                Returns None
+### Examples of Collection Objects
 
-        Other Behaviors
-        ---------------
-            Length : 
-                Passing a collection into the len() method will return the number of cards in the collection.
-
-            Iteration :
-                A collection object is interable and will interate over all cards held by the collection.
-
-            Concatination :
-                Two collection objects can be concatinated with the '+' operator. This returns a new collection.
-
-                Example: new_collection = collection_a + collection_b
-
-            Indexing :
-                A collection can be indexed to acces a card at a specific index.
-
-                Example: card = collection[2]
-
-                Note: Indexing can only access cards and cannot add or modify cards.
-
-            String :
-                Passing a collection into the str() method will return a string describing every card
-                in the collection.
-
-Parameters: 
-- **cards** (list or None) - A list of playing cards held by the Collection object. If `None` (the default), then the Collection object is initialized with an empty list to be filled with cards at a later time.
-- **replacement** (bool) - Determines if cards are drawn from the collection with or without replacement. If `False` (the default), then cards are drawn without replacement. Cards are drawn with replacement if `replacement` is set to `True`.
-
-#### `cards`
-A list of playing card objects. 
-
-#### `discard()`
-Empties the `cards` list. If there are no more references to any of the card objects, I think they're garbage collected by python.
-
-#### `draw()`
-Returns a card object from the `cards` list. If `replacement` is set to `False`, the first card object in the `cards` list is removed and that card is returned. If `replacement` is set to `True`, a random card in the `cards` list is returned *without* removing it from the list.
-
-#### `hide()`
-Sets the `hidden` attribute for every card in the `cards` list to `True`.
-
-#### `reveal()`
-Sets the `hidden` attribute for every card in the `cards` list to `False`.
-
-#### `show()`
-Prints information about each card object in the `cards` list. This calls the `show()` method on each card object.
-
-#### `shuffle()`
-Randomizes the order of the `cards` list. This is like shuffling a deck of cards.
-
-### Other Notes
-This class also defines the `len()` magic method as well as the `+` operation. See the Deck class for examples. 
-
-## The Deck Class
-
-A standard deck of 52 playing cards. This class extends the `Collection` class, and includes all the attributes from its parent.
-
-### *class* `Deck(cards=None)`
-
-A deck of standard playing cards. Extends the Collection Class.
-
-        Parameters
-        ----------
-            cards : list or None
-                A list of card objects to be placed in the deck at construction.
-                If None (the default), the deck will contain the 52 standard playing cards.
-
-            replacement : bool
-                Determines if cards are drawn from the deck with replacement or without replacenemt.
-                This can only be set when a new instance is initialized. Once an instance is initialized, 
-                replacement cannot be changed.
-
-                If False (the default), cards are drawn without replacement.
-                When the draw method is called, a card object is removed from the deck and returnd.
-
-                If True, cards are drawn with replacement.
-                When the draw method is called, a card is returned without removing the card from the collection.
-
-        Methods
-        -------
-            add(cards) :
-                Adds a single card object or a list of card objects to the deck.
-
-                Returns None
-
-                Parameters
-                    cards : list or Card
-                        The card or list of cards to be added to the deck.
-
-            draw() :
-                Returns single card from the deck.
-
-                If replacement is False, the card is removed from the deck.
-                If replacement is True, the card is NOT removed from the deck.
-
-            discard() :
-                Removes all cards from the deck.
-                Returns None
-
-            hide() :
-                Sets the is_hidden attribute for each card in the deck to True.
-                Returns None
-
-            reset() :
-                Removes all cards from the deck and replaces them with the 52 standard playing cards.
-                Returns None
-
-            reveal() :
-                Sets the is_hidden attribute for each card in the deck to False.
-                Returns None
-
-            shuffle() :
-                Randomizes the order of the cards in the deck.
-                Returns None
-
-        Other Behaviors
-        ---------------
-            Length :
-                Passing a deck into the len() method will return the number of cards in the deck.
-
-            Iteration :
-                A deck object is interable and will interate over all cards held by the deck.
-
-            Concatination :
-                Two deck objects can be concatinated with the '+' operator. This returns a new deck.
-
-                Example: new_collection = collection_a + collection_b
-
-            Indexing :
-                A deck can be indexed to acces a card at a specific index.
-
-                Example: card = deck[2]
-
-                Note: Indexing can only access cards and cannot add or modify cards.
-
-            String :
-                Passing a deck into the str() method will return a string describing every card
-                in the deck.
-
-Parameters:
-- **cards** (list or None) - A list of playing cards to be placed in the Deck at construction. If `None` (the default), the deck is constructed with the standard set of 52 playing cards.
-
-#### `build()`
-Adds the 52 standard playing card objects to the deck *without* removing any cards already in the deck. To remove the cards already in the deck, see the `reset()` method. This method is called at construction of a new deck object if the `cards` parameter is `None`.
-
-#### `reset()`
-Resets the deck object to a standard deck of 52 playing cards. This removes all card objects from the deck then fills the empty deck with 52 playing cards.
-
-### Examples
 ```
->>> from cards import *
->>> deck_a = Deck() # the deck object starts with 52 playing cards
+>>> deck_a = Deck() # a new deck is created with 52 card objects
 >>> len(deck_a)
 52
 
->>> deck_a.show()
+>>> print(deck_a) # prints all the cards in the deck
 Ace of Spades
 2 of Spades
 3 of Spades
@@ -281,7 +140,7 @@ Queen of Clubs
 King of Clubs
 
 >>> deck_a.shuffle() # the deck can be shuffled
->>> deck_a.show()
+>>> print(deck_a)
 6 of Clubs
 8 of Diamonds
 7 of Hearts
@@ -306,7 +165,7 @@ This card is hidden.
 104
 
 >>> deck_c.shuffle()
->>> deck_c.show() # The cards from deck_b are still hidden
+>>> print(deck_c) # The cards from deck_b are still hidden
 This card is hidden.
 This card is hidden.
 7 of Spades
@@ -316,96 +175,27 @@ This card is hidden.
 4 of Spades
 This card is hidden.
 This card is hidden.
+
+>>> hand = Hand()
+>>> hand.add(Card(4, 'Hearts')) # cards can be added to a collection one at a time
+>>> hand.add([Card(5, 'Clubs'), Card(1, 'Spades')]) # or a list of cards can be added
+
+>>> for num, card in enumerate(hand): # collections are iterable
+...     print(f'Card {num+1} is the {card}')
+... 
+Card 1 is the 4 of Hearts
+Card 2 is the 5 of Clubs
+Card 3 is the Ace of Spades
+
+>>> hand.value # the ace is worth 11 points
+20
+
+>>> hand.add(Card(6, 'Diamonds')) # adding a 6 of Diamonds
+>>> hand.value # now the ace is worth 1 point
+16
 ```
 
-
-## The Hand Class
-This class defines a player's hand for a game of blackjack. It extends the Collection class.
-
-### *class* `Hand(cards=None, replacemet=False)`
-
-A player's hand in a game of blackjack. Extends the Collection Class. A hand instance is
-    always empty at construction.
-
-    Parameters
-    ----------
-        None
-
-    Data Attributes
-    ---------------
-        value : int
-            The value of the hand as determined by the rules of blackjack.
-
-    Methods
-    -------
-        add(cards) :
-            Adds a single card object or a list of card objects to the hand.
-
-            Returns None
-
-            Parameters
-                cards : list or Card
-                    The card or list of cards to be added to the hand.
-
-        draw() :
-            Removes a single card from the hand and returns that card.
-            Returns Card
-
-        discard() :
-            Removes all cards from the hand.
-            Returns None
-
-        hide() :
-            Sets the is_hidden attribute for each card in the hand to True.
-            Returns None
-
-        reveal() :
-            Sets the is_hidden attribute for each card in the hand to False.
-            Returns None
-
-        shuffle() :
-            Randomizes the order of the cards in the hand.
-            Returns None
-
-    Other Behaviors
-    ---------------
-        Length :
-            Passing a hand into the len() method will return the number of cards in the hand.
-
-        Iteration :
-            A hand object is interable and will interate over all cards held by the hand.
-
-        Concatination :
-            Two hand objects can be concatinated with the '+' operator. This returns a new hand.
-
-            Example: new_collection = collection_a + collection_b
-
-        Indexing :
-            A hand can be indexed to acces a card at a specific index.
-
-            Example: card = hand[2]
-
-            Note: Indexing can only access cards and cannot add or modify cards.
-
-        String :
-            Passing a hand into the str() method will return a string describing every card
-            in the hand.
-
-
-Parameters: 
-- **cards** (list or None) - A list of playing cards held by the Collection object. If `None` (the default), then the Collection object is initialized with an empty list to be filled with cards at a later time.
-- **replacement** (bool) - Determines if cards are drawn from the collection with or without replacement. If `False` (the default), then cards are drawn without replacement. Cards are drawn with replacement is replacement is set to `True`.
-
-#### `cards`
-A list of playing card objects. These are the cards in the player's hand.
-
-#### `value`
-Returns the integer value of the hand as determined by the rules of blackjack. Face cards are worth 10 points. Aces are worth 1 point or 11 points — whichever gets the value closest to 21 without going over. For example, if a hand consist of a 3 and two aces, `value` will return 15 (3+1+11).
-
-#### `num_aces`
-Returns an integer number of aces in the hand.
-
-## The Player Class
+## The Player Base Class
 A base class for blackjack players. Contains attributes relevent to both human players and the dealer.
 
 

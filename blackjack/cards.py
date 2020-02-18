@@ -132,7 +132,7 @@ class Collection():
 
             replacement : bool
                 Determines if cards are drawn from the collection with replacement or without replacenemt.
-                This can only be set when a new instance is initialized. Once an instance is initialized, 
+                This can only be set when a new instance is initialized. Once an instance is initialized,
                 replacement cannot be changed.
 
                 If False (the default), cards are drawn without replacement.
@@ -176,7 +176,7 @@ class Collection():
 
         Other Behaviors
         ---------------
-            Length : 
+            Length :
                 Passing a collection into the len() method will return the number of cards in the collection.
 
             Iteration :
@@ -200,11 +200,9 @@ class Collection():
     """
 
     def __init__(self, cards=None, replacement=False):
-
-        if cards is None:
-            self._cards = []
-        else:
-            self._cards = list(cards)
+        self._cards = []
+        if cards is not None:
+            self.add(cards)
         self._replacement = replacement
 
     def __iter__(self):  # Allows for interation over the collection of cards
@@ -290,7 +288,7 @@ class Deck(Collection):
 
             replacement : bool
                 Determines if cards are drawn from the deck with replacement or without replacenemt.
-                This can only be set when a new instance is initialized. Once an instance is initialized, 
+                This can only be set when a new instance is initialized. Once an instance is initialized,
                 replacement cannot be changed.
 
                 If False (the default), cards are drawn without replacement.
