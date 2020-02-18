@@ -1,4 +1,4 @@
-"""A game of blackjack."""
+"""This module defines a game of blackjack and includes the Game class."""
 
 from .cards import Deck
 from .players import (

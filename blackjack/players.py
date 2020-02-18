@@ -1,4 +1,10 @@
-"""Defines Blackjack players and how they take their turns including the dealer."""
+"""This Module defines Blackjack players and how they take their turns.
+
+The following classes are included in this module:
+    Hand
+    Player
+    HumanPlayer
+    Dealer"""
 
 from .cards import Collection
 

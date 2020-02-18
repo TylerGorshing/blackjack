@@ -4,21 +4,20 @@ This file describes the modules and classes defined in the blackjack package. Fo
 # Modules
 This program contains 3 modules: cards, players, and game. 
 
-The cards module is based on a my previous cards(link here) project with some modifications -- mostly I used new techniques and skills that I learned since I first worte the original cards program. The cards modules defines the Card, Collection, and Deck classes.
+The cards module is based on a my previous cards(link here) project with some modifications - mostly I used new techniques and skills that I learned since I first worte the original cards program. The cards module defines the Card, Collection, and Deck classes.
 
 The players module has classes related to players of a game of blackjack. It includes the Hand, Player, HumanPlayer, and Dealer classes.
 
 The game module has everything needed for the game of blackjack itself. The only class defined here is the Game class.
 
 # Classes
-The following describes the classes defined in the blackjack package.
+The following describes each class defined in the blackjack package.
 
 ## The Card Class
-This class represents a standard playing card. The card can be hidden from view if needed.
+This class represents a standard playing card and is defined in the cards module.
 
 ### *class* `Card(value, suit, is_hidden=False)`
 
-Defined in the cards module
 
 #### Parameters
 - **value** (int) - The value of the card. For a standard deck of playing cards, 1 is Ace, 11 is Jack, 12 is Queen, and 13 is King.
@@ -37,7 +36,7 @@ Defined in the cards module
 - **Comparison Operators** - Cards can be compared with the standard comparison operators (`==`, `<`, `>`, etc). Only the value of the card is used for comparisons.
 - **`str()`** - Returns a string with information about the card in the form of `'{value} of {suit}'`. If `is_hidden` is True, returns the string `'This card is hidden.'` This allows a card object to be passed into the `print()` method.
 
-#### Examples
+#### Examples of card objects
 
 ```
 >>>card_a = Card(4, 'Spades')
@@ -69,18 +68,20 @@ True
 
 This class is a base class for any object whose purpose is to hold cards, for example, a deck of playing cards or a player's hand in a card game.
 
-This is the parent to the Deck and Hand classes.
-
 ### *class* `Collection(cards=None, replacement=False)`
+
+This is the parent to the Deck and Hand classes, and is defined in the cards module.
 
 #### Parameters
 - **cards** (list or None) - A list of cards objects (or a single card object) to be placed in the collection at construction. If `None` (the default), then the collection object is initialized with an empty list to be filled with cards at a later time.
 - **replacement** (bool) - Determines if cards are drawn from the collection with or without replacement. If `False` (the default), then cards are drawn without replacement. Cards are drawn with replacement if `replacement` is set to `True`. This cannot be changed after the collection object has been constructed.
 
 #### Methods
-- **`add(cards)`** - Adds a single card object or a list of card objects to the collection. This is similar to the `append()` method for a list. Returns None
+- **`add(cards)`** - Adds a single card object or a list of card objects to the collection. This is similar to the `append()` method for a list. Returns None.
+
     Parameters
         - **cards** (Card or list) - The card or list of cards to be added to the collection.
+
 - **`draw()`** - Returns a single card object from the collection.
     If replacement is `False`, the card is removed from the collection.
     If replacement is `True`, the card is NOT removed from the collection.
@@ -92,7 +93,7 @@ This is the parent to the Deck and Hand classes.
 #### Other Behaviors
 - **Iteration** - A collection object is interable and will interate over all cards held by the collection.
 - **Concatination** (The `+` operator) - Two collection objects can be concatinated with the '+' operator. This returns a new collection.
-- **Indexing** - A collection can be indexed to acces a card at a specific index. Indexing can only access cards and cannot add or modify cards.
+- **Indexing** - A collection can be indexed to acces a card at a specific index and also supports slicing. Indexing can only access cards and cannot add or modify cards.
 - **`len()`** - Passing a collection into the `len()` method will return the number of cards in the collection.
 - **`str()`** - Passing a collection into the str() method will return a string describing every card in the collection. This allows a colletion to be passed as an argument into the `print()` method.
 
@@ -103,7 +104,7 @@ A standard deck of 52 playing cards.
 This class is defined in the cards module. It extends the `Collection` class, and includes all the attributes from its parent.
 
 #### Parameters
-- **cards** (list or None) - A list of cards objects (or a single card object) to be placed in the deck at construction. If `None` (the default), then the deck object is initialized with the set of 52 standard playing cards.
+- **cards** (list or None) - A list of card objects (or a single card object) to be placed in the deck at construction. If `None` (the default), then the deck object is initialized with the standard set of 52 playing cards.
 - **replacement** (bool) - Determines if cards are drawn from the deck with or without replacement. If `False` (the default), then cards are drawn without replacement. Cards are drawn with replacement if `replacement` is set to `True`. This cannot be changed after the deck object has been constructed.
 
 #### Methods
@@ -114,7 +115,7 @@ This section only details the methods defined in the Deck class. Other supported
 ### *class* `Hand()`
 A player's hand in a game of blackjack. 
 
-This class is defined in the players module. It extends the `Collection` class, and includes all the attributes from its parent. For other supported methods, see the collection class.
+This class is defined in the players module. It extends the `Collection` class, and includes all the attributes from its parent. For other supported methods, see the `Collection` class.
 
 #### Parameters
 The Hand class takes no parameters and is always empty at construction.
@@ -176,7 +177,7 @@ This card is hidden.
 This card is hidden.
 This card is hidden.
 
->>> hand = Hand()
+>>> hand = Hand() # a hand object
 >>> hand.add(Card(4, 'Hearts')) # cards can be added to a collection one at a time
 >>> hand.add([Card(5, 'Clubs'), Card(1, 'Spades')]) # or a list of cards can be added
 
@@ -198,210 +199,73 @@ Card 3 is the Ace of Spades
 ## The Player Base Class
 A base class for blackjack players. Contains attributes relevent to both human players and the dealer.
 
-
-
-
-
-
-
-
 ### *class* `Player(name)`
-Parameters:
-- name (str) - The name of the player.
-
 A blackjack player. The base class for the Dealer and HumanPlayer classes.
 
-    Parameters
-    ----------
-        name : str
-            The name of the player.
+#### Parameters
+- **name** (str) - The name of the player.
 
-    Data Attributes
-    ---------------
-        had_turn : bool
-            False if the player has not taken their turn. True if the player has taken their turn.
+#### Data Attributes
+- **`had_turn`** (bool) - Returns `False` if the player has not taken their turn and `True` if the player has taken their turn.
+- **`hand`** (Hand) - The player's blackjack hand. 
+- **`name`** (str) - The player's name.
 
-        hand : Hand
-            The player's blackjack hand.
-
-        name : str
-            The player's name.
-
-    Methods
-    -------
-    begin_trun() :
-        Called at the beginning of a palyer's turn by the Game object.
-
-        This method is required for the Game object, but it doesn't have to do anything.
-
-    clean_up() :
-        Empties the player's hand and set 'had_turn' to False. Called by the Game object at the end of a game.
-        Returns None
-
-    decision() :
-        Allows the player object to 'hit' or 'stay' in a game of blackjack.
-        Returns True if the player chooses to 'hit'.
-        Returns False if the player chooses to 'stay'.
-
-#### `busted`
-Returns a bool. True of the player's hand value exceeds 21. False otherwise.
-
-#### `clean_up()`
-Called at the end of a game of blackjack. This method empties the player's hand and sets `completedTurn`, `won`, `lost`, and `busted` to False in preparation for a new game of blackjack.
-
-#### `completedTurn`
-Returns a bool. False if the player hasn't had their turn yet. True otherwise.
-
-#### `hand`
-Hand object. This is the players hand for a game of blackjack.
-
-#### `hadBlackjack`
-Returns a bool. True if they player's hand value is *exactly* 21. False otherwise.
-
-#### `lost`
-Retuns a bool. True if the player has not busted *and* was beated by the dealer. False if the player has busted or if the player beat the dealer. Also returns False if they player hasn't had their turn.
-
-#### `name`
-Returns a string. The player's name
-
-#### `won`
-Returns a bool. True if the player has completed thier turn, beaten the dealer, *and* has not busted. False otherwise.
-
-
-
-
-
-
-## The HumanPlayer Calss
-Defines a class that allows a human to play a game of blackjack. This class extends the Player class.
+#### Methods
+- **`begin_trun()`** - Called at the beginning of a palyer's turn by the Game object. This method is required for the Game object, but it doesn't have to do anything. Returns None.
+- **`clean_up()`** - Empties the player's hand and sets 'had_turn' to False. Called by the Game object at the end of a game. Returns None
+- **`decision()`** - Allows the player object to 'hit' or 'stay' in a game of blackjack. Should return `True` if the player chooses to 'hit' and `False` if the player chooses to 'stay'.
 
 ### *class* `HumanPlayer(name)`
-Parameters:
+Defines a class that allows a human to play a game of blackjack. This class extends the Player class. For other supported attribues and methods, see the `Player` class.
+
+#### Parameters
 - **name** (str) - The name of the human player.
 
-Allows a human user to interact with a game of blackjack. Extends the Player class.
-
-    Parameters
-    ----------
-        name : str
-            The name of the human.
-
-    Data Attributes
-    ---------------
-        had_turn : bool
-            False if the human has not taken their turn. True if the human has taken their turn.
-
-        hand : Hand
-            The human's blackjack hand.
-
-        name : str
-            The human's name.
-
-    Methods
-    -------
-    begin_trun() :
-        Called at the beginning of a palyer's turn by the Game object. Doesn't do anything for a human human.
-        Returns None
-
-    clean_up() :
-        Empties the human's hand and set 'had_turn' to False. Called by the Game object at the end of a game.
-        Returns None
-
-    decision() :
-        Ask the human if they want to hit or stay.
-        Returns True if the human chooses to 'hit'.
-        Returns False if the human chooses to 'stay'.
-
-This class includes all attributes of the Player class with the addition of a tern method.
-
-#### `turn()`
-Allows a human to take their turn. This method prints information about the game to the terminal then askes the player how they would like to procede. This method ends the player's turn if the player chooses to stay or if the player busts. Returns a bool to be handled by the game object. True if the player chooses to hit, False if the player chooses to stay.
-
-
-
-
-
-
-## The Dealer Class
-This class defines the dealer in blackjack. The dealer is fully automated by the game.
+#### Methods
+- **`begin_trun()`** - Called at the beginning of a palyer's turn by the Game object. This method doesn't do anything for a human player. Returns None.
+- **`decision()`** - Using the terminal, this methods asks the human if they would like to 'hit' or 'stay', collects input from the human, and communicates the decision with the game object. Returns `True` if the human chooses to 'hit' and `False` if the human chooses to 'stay'.
 
 ### *class* `Dealer()`
+This class defines the dealer in blackjack and extends the `Player` class. The dealer is fully automated by the game. For other supported attribues and methods, see the `Player` class.
 
+#### Parameters
+    The dealer class take no arguments at construction. The name of the a dealer object is `'The Dealer'`.
 
-The dealer in a game of Blackjack. Inherits from the Player class.
-
-    Parameters
-    ----------
-        None
-
-    Data Attributes
-    ---------------
-        had_turn : bool
-            False if the dealer has not taken their turn. True if the dealer has taken their turn.
-
-        hand : Hand
-            The dealer's blackjack hand.
-
-        name : str
-            'The Dealer'
-
-    Methods
-    -------
-    begin_trun() :
-        Reveals any hidden cards in the dealer's hand. Called by the game object at the begining of the dealer's turn.
-        Returns None
-
-    clean_up() :
-        Empties the dealer's hand and sets 'had_turn' to False. Called by the Game object at the end of a game.
-        Returns None
-
-    decision() :
-        Determines if the dealer should hit or stay using the standard rules of blackjack
-        Returns True if the dealer hits (hand value of less than 17).
-        Returns False if the dealer stays (hand value of 17 or more).
+#### Methods
+- **`begin_trun()`** - Reveals any hidden cards in the dealer's hand. Called by the game object at the begining of the dealer's turn. Returns None.
+- **`decision()`** - Determines if the dealer should hit or stay using the standard rules of blackjack. Returns True if the dealer hits (hand value of less than 17). Returns False if the dealer stays (hand value of 17 or more).
 
 This class includes all attributes of the Player class with the addition of a tern method. The dealer's name is always `'The Dealer'`.
 
-#### `turn()`
-The dealer takes their turn based on the standard rules of blackjack. Returns a bool to be handled by the game object. True if the dealer hits (has a hand value less than 17). False if the dealer stays (has a hand value of 17 or more).
-
 ## The Game Class
-Represents a game of blackjack.
+Represents a game of blackjack. A game object handles all interactions in blackjack. The game shuffles the deck, deals the cards to all palyers, allows the players (including the dealer) to take their turn, and discards all player hands at the end of the game. Opptionally, the game object prints a summary at each step of blackjack.
 
-    To start a game of blackjack
+For more about starting or playing a game of blackjack, see the README.md file.
 
-    Parameters
-    ----------
-        *players : Player or list
-            The player or list of players to play the game of blackjack.
+### *class* `Game(*players, summary=True)`
 
-        summary : bool
-            If True (the default), the game will print a summary of what's happening in the game.
-            If False, the game will run without printing anything to the terminal.
+#### Parameters
+- **\*players** (Player or list) - The player or list of players to play the game of blackjack.
+- **summary** (bool) - If True (the default), the game will print a summary of what's happening in the game. If False, the game will run without printing anything to the terminal.
 
-    Notes
-    -----
-        A New Game :
-            To play a game of blackjack, create a game instance by passing all player objects into the constructor,
-            then simply call the game object.
+#### Notes
+ALL players MUST have the following methods.
+- `begin_turn()`
 
-            Example:
-                game = Game(alice, bob) # creats a Game instance with all player objects
-                game() # starts a new game of blackjack
+    This is called at the begining of a player's turn. Not all player's need to do something here, but for example, the dealer needs to reveal any hidden cards at the begining of their turn.
 
+- `decision()`
 
-        ALL players MUST have the following methods defined.
-            begin_turn()
-                This is called at the begining of a player's turn. Not all player's need to do something here, but
-                for example, the dealer needs to reveal any hidden cards at the begining of their turn.
+    This is called when the player needs to choose to hit or stay and might be called several times during thier turn.
 
-            decision()
-                This is called when the player needs to choose to hit or stay and might be called
-                several times during thier turn.
+    return `True` if the player hits
+    return `False` if the player stays
 
-                return True if the player hits
-                return False if the player stays
+- `clean_up()`
 
-            clean_up()
-                Called at the end of the game. Generally, the player dicards and had_turn is set to False in
-                in preparation for their turn.
+        Called at the end of the game. Generally, the player dicards their hand and had_turn is set to False in
+        in preparation for their turn.
+
+The game also assumes the following
+- Player objects have a `'name'` represented as a string
+- Players have a `Hand` object with a `value` attribute and a `add()` method

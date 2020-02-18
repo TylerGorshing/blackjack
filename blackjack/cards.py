@@ -1,4 +1,9 @@
-"""
+"""This module defines cards and related objects.
+
+The following classes are included in this module:
+    Card
+    Collection
+    Deck
 """
 
 import random
