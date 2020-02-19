@@ -143,7 +143,7 @@ class Game():
         for player in self._players:
             player_score = player.hand.value
             if player_score <= 21:
-                if player_score < dealer_score < 21:
+                if player_score < dealer_score <= 21:
                     self._anounce(f'{player.name} Loses!')
                 else:
                     self._anounce(f'{player.name} Wins!')

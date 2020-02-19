@@ -1,24 +1,20 @@
 # Blackjack
-
-
-## About this Project
-
-The goal of this project was to write a functional blackjack program in python using OOP.
-
-After I completed the cards.py project, I wanted to take everything a step further and create a functional program with classes. I decided that building on top of my previous project would be the simplest way to acomplish this goal, so I built a blackjack game that uses the cards.py project as a module.
-
-# Blackjack
-An exercise in object oriented programming
+An exercise in object oriented programming.
 
 ## About this Project
 
-The goal of this project was to write a functional blackjack program in python using OOP.
+The goal of this project was to write a functional program in python using OOP.
 
-After I completed the cards.py project, I wanted to take everything a step further and create a functional program with classes. I decided that building on top of my previous project would be the simplest way to acomplish this goal, so I built a blackjack game that uses the cards.py project as a module.
+After I completed the cards.py project, I wanted to take everything a step further and create a functional program with classes. I decided that building on top of my previous project would be the simplest way to acomplish this goal, so I built a blackjack game that uses a modified and updated version of my cards.py project as a module.
+
+Documentaion for this program can be found in the DOCUMENTAION.md file.
 
 ## Running the Program
+Running the program requires Python 3.7 or later. The program can be launched from the from terminal by navigated to the directory contaning the blackjack package and entering the following command:
 
-The code can be run from the terminal by navigating to the appropriate directory. Upon launch, the program will start by asking for the number of human players then ask for the name of each player.
+`python -m blackjack`
+
+The `-m` flag tell python to run the package as a script using `__main__` module in the package. Upon launch, the program will first ask how many humans are playing.
 
 ```
 How many human players are playing? 
@@ -29,136 +25,118 @@ What is the name of player 2?
 Bob
 ```
 
-After collecting information from the user, the program starts a game of blackjack by calling the Game.round() method. This method deals cards to all the players and the dealer, prints the all the relavent information to the screen, then begins the first player's turn.
+After collecting information from the user, the program starts a game of blackjack by creating a game object with the human players. Because the game object is callable the program simply calls `game()` to start a new game.
 
-The program will print all the cards of each player, but only one card from the dealer's hand revealing just as much information to each player as a real game of blackjack.
+The program will print all the cards of each player, but only one card from the dealer's hand revealing just as much information to each player as a real game of blackjack. Then player 1 (Alice), can take their turn.
 
 ```
-  ----- New Game ----- 
- 
+----- New Game! -----
 
-The Dealer:
+
+----- The Dealer -----
 This card is hidden.
-4 of Hearts
+8 of Spades
 
 
-Alice with a hand value of 12:
-Jack of Diamonds
-2 of Spades
+
+----- Alice with 9 -----
+3 of Diamonds
+6 of Diamonds
 
 
-Bob with a hand value of 15:
-10 of Diamonds
-5 of Clubs
 
-
----------- Alice with a hand value of 12. ---------- 
-
-Jack of Diamonds
-2 of Spades
-Enter "hit" or "stay". 
-```
-
- At this point, Alice takes her turn by entering "hit" or "stay". The program can identify if something other than "hit" or "stay" is entered and handles the situation appropriately. 
+----- Bob with 21 -----
+Ace of Spades
+King of Diamonds
 
 ```
----------- Alice with a hand value of 12. ---------- 
 
-Jack of Diamonds
-2 of Spades
+Alice takes her turn by entering "hit" or "stay". The program can identify if something other than "hit" or "stay" is entered and handles the situation appropriately. Alice continues to take her turn until she busts or chooses to stay.
+
+
+
+```
+----- Alice with 9 -----
+3 of Diamonds
+6 of Diamonds
+
 Enter "hit" or "stay". 
-hit
- 
-Alice hits and has a hand value of 17
-Jack of Diamonds
-2 of Spades
-5 of Diamonds
-Enter "hit" or "stay". 
-run away
+hello
 
 You must type "hit" or "stay".
 Enter "hit" or "stay". 
-stay
  
-Alice stays with a hand value of 17 
+hit
+Alice hits.
+
+3 of Diamonds
+6 of Diamonds
+2 of Clubs
+
+
+Alice has 11.
+
+Enter "hit" or "stay". 
+hit
+Alice hits.
+
+3 of Diamonds
+6 of Diamonds
+2 of Clubs
+7 of Diamonds
+
+
+Alice has 18.
+
+Enter "hit" or "stay". 
+hit
+Alice hits.
+
+3 of Diamonds
+6 of Diamonds
+2 of Clubs
+7 of Diamonds
+8 of Hearts
+
+
+Alice has 26.
+
+Alice busts!
 ```
 
- Alice's turn is over when she chooses to stay or if her score exceeds 21. When Alice's turn is over, Bob begins his turn.
+When Alice's turn is over, player 2 (Bob) begins their turn.
 
  ```
- ---------- Bob with a hand value of 15. ---------- 
+----- Bob with 21 -----
+Ace of Spades
+King of Diamonds
 
-10 of Diamonds
-5 of Clubs
 Enter "hit" or "stay". 
-hit
- 
-Bob hits and has a hand value of 18
-10 of Diamonds
-5 of Clubs
-3 of Diamonds
-Enter "hit" or "stay". 
-hit
- 
-Bob hits and has a hand value of 27
-10 of Diamonds
-5 of Clubs
-3 of Diamonds
-9 of Spades
-Bob has busted! 
+stay
+Bob stays with 21.
+
 ```
 
 When all the humans have completed their turns, the dealer takes a turn following the standard rules of blackjack. A summery of the game is then printed to the screen, and the players are given the option of playting another round.
 
 ```
----------- The Dealer with a hand value of 15. ---------- 
+----- The Dealer with 18 -----
+Queen of Spades
+8 of Spades
 
-Ace of Spades
-4 of Hearts
- 
-The Dealer hits and has a hand value of 15
-Ace of Spades
-4 of Hearts
-King of Hearts
- 
-The Dealer hits and has a hand value of 22
-Ace of Spades
-4 of Hearts
-King of Hearts
-7 of Hearts
-The Dealer has busted! 
- 
+The Dealer stays with 18.
 
 
- 
- ----------Outcome---------- 
- 
 
------ The Dealer has busted! -----
-Ace of Spades
-4 of Hearts
-King of Hearts
-7 of Hearts
+----- Final Results -----
 
 
------ Alice has a hand value of 17. -----
-Jack of Diamonds
-2 of Spades
-5 of Diamonds
+----- Alice Busts! -----
 
 
-Alice has won! 
-
------ Bob has busted! -----
-10 of Diamonds
-5 of Clubs
-3 of Diamonds
-9 of Spades
-
-
-Bob has lost. 
-
+----- Bob Wins! -----
 Another round? Y/N
+
 ```
 
 

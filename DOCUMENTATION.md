@@ -1,6 +1,8 @@
 # Documentation
 This file describes the modules and classes defined in the blackjack package. For more information about running the program or playing the game, see the README.md file.
 
+This program is written using Python 3.7.
+
 # Modules
 This program contains 3 modules: cards, players, and game. 
 
@@ -245,6 +247,9 @@ For more about starting or playing a game of blackjack, see the README.md file.
 #### Parameters
 - **\*players** (Player or list) - The player or list of players to play the game of blackjack.
 - **summary** (bool) - If `True` (the default), the game will print a summary of what's happening in the game. If `False`, the game will run without printing anything to the terminal.
+
+#### Other Behaviors
+- The game object is callable with `game()`. Calling a game object starts a new round of blackjack.
 
 #### Notes
 ALL players MUST have the following methods.

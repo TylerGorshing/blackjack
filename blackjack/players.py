@@ -4,7 +4,8 @@ The following classes are included in this module:
     Hand
     Player
     HumanPlayer
-    Dealer"""
+    Dealer
+"""
 
 from .cards import Collection
 
