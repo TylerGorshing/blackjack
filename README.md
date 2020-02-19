@@ -1,86 +1,142 @@
-# Blackjack-2.0
-Version 2 of my blackjack game
-
-From Version 1.0 Make a 'documentaion.md' file for all the documentaion. Now that it's been rewritten, it should be a lot easier to document.
+# Blackjack
+An exercise in object oriented programming.
 
 ## About this Project
 
-The goal of this project was to write a functional blackjack program in python using OOP.
+The goal of this project was to write a functional program in python using OOP.
 
-After I completed the cards.py project, I wanted to take everything a step further and create a functional program with classes. I decided that building on top of my previous project would be the simplest way to acomplish this goal, so I built a blackjack game that uses the cards.py project as a module.
+After I completed the cards.py project, I wanted to take everything a step further and create a functional program with classes. I decided that building on top of my previous project would be the simplest way to acomplish this goal, so I built a blackjack game that uses a modified and updated version of my cards.py project as a module.
 
-# About the Code
+Documentaion for this program can be found in the DOCUMENTAION.md file.
 
-This program has 3 modules. The cards module is taken directly from a my previous cards(link here) project with no change. The new classes defined in this program are documented here.
+## Running the Program
+Running the program requires Python 3.7 or later. The program can be launched from the from terminal by navigated to the directory contaning the blackjack package and entering the following command:
 
-## The Hand Class
-This class defines a player's hand for a game of blackjack. It extends the Collection class.
+`python -m blackjack`
 
-### *class* `Hand(cards=None, replacemet=False)`
-Parameters: 
-- **cards** (list or None) - A list of playing cards held by the Collection object. If `None` (the default), then the Collection object is initialized with an empty list to be filled with cards at a later time.
-- **replacement** (bool) - Determines if cards are drawn from the collection with or without replacement. If `False` (the default), then cards are drawn without replacement. Cards are drawn with replacement is replacement is set to `True`.
+The `-m` flag tell python to run the package as a script using `__main__` module in the package. Upon launch, the program will first ask how many humans are playing.
 
-#### `cards`
-A list of playing card objects. These are the cards in the player's hand.
+```
+How many human players are playing? 
+2
+What is the name of player 1? 
+Alice
+What is the name of player 2? 
+Bob
+```
 
-#### `value`
-Returns the integer value of the hand as determined by the rules of blackjack. Face cards are worth 10 points. Aces are worth 1 point or 11 points — whichever gets the value closest to 21 without going over. For example, if a hand consist of a 3 and two aces, `value` will return 15 (3+1+11).
+After collecting information from the user, the program starts a game of blackjack by creating a game object with the human players. Because the game object is callable the program simply calls `game()` to start a new game.
 
-#### `num_aces`
-Returns an integer number of aces in the hand.
+The program will print all the cards of each player, but only one card from the dealer's hand revealing just as much information to each player as a real game of blackjack. Then player 1 (Alice), can take their turn.
 
-## The Player Class
-A base class for blackjack players. Contains attributes relevent to both human players and the dealer.
+```
+----- New Game! -----
 
-### *class* `Player(name)`
-Parameters:
-- name (str) - The name of the player.
 
-#### `busted`
-Returns a bool. True of the player's hand value exceeds 21. False otherwise.
+----- The Dealer -----
+This card is hidden.
+8 of Spades
 
-#### `clean_up()`
-Called at the end of a game of blackjack. This method empties the player's hand and sets `completedTurn`, `won`, `lost`, and `busted` to False in preparation for a new game of blackjack.
 
-#### `completedTurn`
-Returns a bool. False if the player hasn't had their turn yet. True otherwise.
 
-#### `hand`
-Hand object. This is the players hand for a game of blackjack.
+----- Alice with 9 -----
+3 of Diamonds
+6 of Diamonds
 
-#### `hadBlackjack`
-Returns a bool. True if they player's hand value is *exactly* 21. False otherwise.
 
-#### `lost`
-Retuns a bool. True if the player has not busted *and* was beated by the dealer. False if the player has busted or if the player beat the dealer. Also returns False if they player hasn't had their turn.
 
-#### `name`
-Returns a string. The player's name
+----- Bob with 21 -----
+Ace of Spades
+King of Diamonds
 
-#### `won`
-Returns a bool. True if the player has completed thier turn, beaten the dealer, *and* has not busted. False otherwise.
+```
 
-## The HumanPlayer Calss
-Defines a class that allows a human to play a game of blackjack. This class extends the Player class.
+Alice takes her turn by entering "hit" or "stay". The program can identify if something other than "hit" or "stay" is entered and handles the situation appropriately. Alice continues to take her turn until she busts or chooses to stay.
 
-### *class* `HumanPlayer(name)`
-Parameters:
-- **name** (str) - The name of the human player.
 
-This class includes all attributes of the Player class with the addition of a tern method.
 
-#### `turn()`
-Allows a human to take their turn. This method prints information about the game to the terminal then askes the player how they would like to procede. This method ends the player's turn if the player chooses to stay or if the player busts. Returns a bool to be handled by the game object. True if the player chooses to hit, False if the player chooses to stay.
+```
+----- Alice with 9 -----
+3 of Diamonds
+6 of Diamonds
 
-## The Dealer Class
-This class defines the dealer in blackjack. The dealer is fully automated by the game.
+Enter "hit" or "stay". 
+hello
 
-### *class* `Dealer()`
+You must type "hit" or "stay".
+Enter "hit" or "stay". 
+ 
+hit
+Alice hits.
 
-This class includes all attributes of the Player class with the addition of a tern method. The dealer's name is always `'The Dealer'`.
+3 of Diamonds
+6 of Diamonds
+2 of Clubs
 
-#### `turn()`
-The dealer takes their turn based on the standard rules of blackjack. Returns a bool to be handled by the game object. True if the dealer hits (has a hand value less than 17). False if the dealer stays (has a hand value of 17 or more).
 
-## The Game Class
+Alice has 11.
+
+Enter "hit" or "stay". 
+hit
+Alice hits.
+
+3 of Diamonds
+6 of Diamonds
+2 of Clubs
+7 of Diamonds
+
+
+Alice has 18.
+
+Enter "hit" or "stay". 
+hit
+Alice hits.
+
+3 of Diamonds
+6 of Diamonds
+2 of Clubs
+7 of Diamonds
+8 of Hearts
+
+
+Alice has 26.
+
+Alice busts!
+```
+
+When Alice's turn is over, player 2 (Bob) begins their turn.
+
+ ```
+----- Bob with 21 -----
+Ace of Spades
+King of Diamonds
+
+Enter "hit" or "stay". 
+stay
+Bob stays with 21.
+
+```
+
+When all the humans have completed their turns, the dealer takes a turn following the standard rules of blackjack. A summery of the game is then printed to the screen, and the players are given the option of playting another round.
+
+```
+----- The Dealer with 18 -----
+Queen of Spades
+8 of Spades
+
+The Dealer stays with 18.
+
+
+
+----- Final Results -----
+
+
+----- Alice Busts! -----
+
+
+----- Bob Wins! -----
+Another round? Y/N
+
+```
+
+

@@ -1,6 +1,9 @@
-"""
-A learning exercise to learn OOP in python.
+"""This module defines cards and related objects.
 
+The following classes are included in this module:
+    Card
+    Collection
+    Deck
 """
 
 import random
@@ -17,21 +20,55 @@ class Card():
             suit : str
                 The suit of the card. Generally 'Spades', 'Hearts', 'Diamonds', or 'Clubs'.
 
-        Attributes
-        -----------
-            hidden : bool
-                If true, the card is "face down" and can't be viewed with the show() method.
+            is_hidden : bool
+                If true, the card is "face down" and information about the Card can't be viewed.
+                If None (the default) is_hidden is set to False
+
+        Data Attributes
+        ---------------
+            value : int or None
+                Returns the value of the card. If is_hidden is True, returns None.
+
+            suit : str or None
+                Returns the suit of the card. If is_hidden is True, returns None.
+
+            is_hidden : bool
+                A repesentation of wether information about the card can be accessed.
+                True if the card is 'facedown' (no on can see the information). False if
+                the card is 'faceup' (everyone can see the information).
+
+        Methods
+        -------
+            flip() :
+                Changes the value of is_hidden. This is like flipping a card from facedown to faceup.
+                Returns None
+
+        Other Behaviors
+        ---------------
+            Comparison Operators :
+                Cards can be compared with the standard comparison operators (==, <, >, etc.).
+                Only the value of the card is used for comparisons.
+
+                Card(4, 'Spades') == Card(8, 'Spades') will return False
+                Card(4, 'Spades') == Card(4, 'Hearts') will return True
+
+            str() :
+                Returns a string with information about the card in the
+                form of '{value} of {suit}'
+
+                str(Card(4, 'Spades')) will return '4 of Spades'
+                str(Card(12, 'Hearts')) will return 'Queen of Hearts'
     """
 
-    def __init__(self, value: int, suit: str, hidden=False):
+    def __init__(self, value: int, suit: str, is_hidden=False):
 
         self._value = value
         self._suit = suit
-        self._is_hidden = hidden
+        self._is_hidden = is_hidden
 
     @property  # use properties so these can't be changed from the outside.
     def value(self):
-        """Returns the numerical value of the card. Returns None if self.hidden=True"""
+        """Returns the numerical value of the card. Returns None if is_hidden is True"""
         if not self._is_hidden:
             return self._value
         else:
@@ -39,45 +76,36 @@ class Card():
 
     @property
     def suit(self):
-        """Returns the suit of the card. Returns None if self.hidden=True"""
+        """Returns the suit of the card. Returns None if is_hidden is True"""
         if not self._is_hidden:
             return self._suit
         else:
             return None
 
-    @property  # The only way to change the state of this card is to 'flip' it over
+    @property  # The only way to change the is_hidden state of this card is to 'flip' it over
     def is_hidden(self):
         """Returns True if the card is hidden, False if the card is not hidden."""
         return self._is_hidden
 
     def flip(self):
-        """ 'flips' the card over and changes the value of _is_hidden."""
+        """Changes the value of is_hidden. Like flipping a card facedown to hid all the information."""
         self._is_hidden = not self._is_hidden
 
-    def info(self):
-        """Prints the value and suit of the Card object."""
+    def __str__(self):
 
         if self._is_hidden:
-            print("This card is hidden.")
-            return None
+            return "This card is hidden."
 
         if self.value == 1:
-            print(f'Ace of {self.suit}')
+            return f'Ace of {self.suit}'
         elif self.value < 11:
-            print(f'{self.value} of {self.suit}')
+            return f'{self.value} of {self.suit}'
         elif self.value == 11:
-            print(f'Jack of {self.suit}')
+            return f'Jack of {self.suit}'
         elif self.value == 12:
-            print(f'Queen of {self.suit}')
+            return f'Queen of {self.suit}'
         else:
-            print(f'King of {self.suit}')
-
-    # Ordering functions:
-    #     The following functions define an order on the cards. Note, the order depends entirely
-    #     on the value of the card and nothing else. Bacause of this, two cards are equal
-    #     if they have the same value but not necessarly the same suit.
-
-    #     Card(4, 'Spades') == Cards(4, 'Hearts') # This will return true
+            return f'King of {self.suit}'
 
     def __lt__(self, other):
         return self.value < other.value
@@ -99,25 +127,87 @@ class Card():
 
 
 class Collection():
-    """An object for a collection of cards. This is the base class for a deck of cards or a player's hand.
+    """An object for a collection of cards. This is the base class for Deck and Hand.
 
-        Attributes:
+        Parameters
         ----------
-        cards : list
-            A list to hold the playing card objects in the collection.
+            cards : list or None
+                A list of card objects to be placed in the collection at construction.
+                If None (the default), the collections is empty once constructed.
 
-        replacement : bool
-            If True, self.draw() does NOT remove a card object from the collection.
-            If False, self.draw() removes a card object from the collection.
+            replacement : bool
+                Determines if cards are drawn from the collection with replacement or without replacenemt.
+                This can only be set when a new instance is initialized. Once an instance is initialized,
+                replacement cannot be changed.
+
+                If False (the default), cards are drawn without replacement.
+                When the draw method is called, a card object is removed from the collection and returnd.
+
+                If True, cards are drawn with replacement.
+                When the draw method is called, a card is returned without removing the card from the collection.
+
+        Methods
+        -------
+            add(cards) :
+                Adds a single card object or a list of card objects to the collection.
+
+                Returns None
+
+                Parameters
+                    cards : list or Card
+                        The card or list of cards to be added to the collection.
+
+            draw() :
+                Returns single card from the collection.
+
+                If replacement is False, the card is removed from the collection.
+                If replacement is True, the card is NOT removed from the collection.
+
+            discard() :
+                Removes all cards from the collection.
+                Returns None
+
+            hide() :
+                Sets the is_hidden attribute for each card in the collection to True.
+                Returns None
+
+            reveal() :
+                Sets the is_hidden attribute for each card in the collection to False.
+                Returns None
+
+            shuffle() :
+                Randomizes the order of the cards in the collection.
+                Returns None
+
+        Other Behaviors
+        ---------------
+            Length :
+                Passing a collection into the len() method will return the number of cards in the collection.
+
+            Iteration :
+                A collection object is interable and will interate over all cards held by the collection.
+
+            Concatination :
+                Two collection objects can be concatinated with the '+' operator. This returns a new collection.
+
+                Example: new_collection = collection_a + collection_b
+
+            Indexing :
+                A collection can be indexed to acces a card at a specific index.
+
+                Example: card = collection[2]
+
+                Note: Indexing can only access cards and cannot add or modify cards.
+
+            String :
+                Passing a collection into the str() method will return a string describing every card
+                in the collection.
     """
 
     def __init__(self, cards=None, replacement=False):
-
-        if cards is None:
-            self._cards = []
-        else:
-            self._card_check(cards)
-            self._cards = list(cards)
+        self._cards = []
+        if cards is not None:
+            self.add(cards)
         self._replacement = replacement
 
     def __iter__(self):  # Allows for interation over the collection of cards
@@ -144,27 +234,17 @@ class Collection():
         """Allows the collection object to be indexed."""
         return self._cards[index]
 
-    def _card_check(self, to_check):
-        """Checks the type of each object to be held by the collection"""
-        try:
-            for item in to_check:
-                if type(item) is not Card:
-                    raise TypeError(
-                        f'{type(self).__name__} object can only hold Card objects')
-            return None
-        except TypeError:
-            if type(to_check) is not Card:
-                raise TypeError(
-                    f'{type(self).__name__} object can only hold Card objects')
-            return None
+    def __str__(self):
+        string_ = ''
+        for card in self:
+            string_ += str(card) + '\n'
+        return string_
 
     def add(self, cards):
         """Adds a card object or a list of card objects to the collection"""
-        self._card_check(cards)
-
         try:
             for card in cards:
-                self.add(card)
+                self._cards.append(card)
         except TypeError:
             self._cards.append(cards)
 
@@ -190,12 +270,6 @@ class Collection():
             if not card.is_hidden:
                 card.flip()
 
-    def info(self):
-        """Prints the value and suit of each card in the collection."""
-
-        for card in self:
-            card.info()
-
     def reveal(self):
         """flips all cards to a not hidden state"""
         for card in self:
@@ -209,13 +283,85 @@ class Collection():
 
 
 class Deck(Collection):
-    """ A deck of standard playing cards.
+    """ A deck of standard playing cards. Extends the Collection Class.
 
-    A freshly initialized Deck object consists of 52 Card objects with the
-    standard suits and values. This can be used as a deck of cards to
-    play various games.
+        Parameters
+        ----------
+            cards : list or None
+                A list of card objects to be placed in the deck at construction.
+                If None (the default), the deck will contain the 52 standard playing cards.
 
-    Inharets from the Collection Class.
+            replacement : bool
+                Determines if cards are drawn from the deck with replacement or without replacenemt.
+                This can only be set when a new instance is initialized. Once an instance is initialized,
+                replacement cannot be changed.
+
+                If False (the default), cards are drawn without replacement.
+                When the draw method is called, a card object is removed from the deck and returnd.
+
+                If True, cards are drawn with replacement.
+                When the draw method is called, a card is returned without removing the card from the collection.
+
+        Methods
+        -------
+            add(cards) :
+                Adds a single card object or a list of card objects to the deck.
+
+                Returns None
+
+                Parameters
+                    cards : list or Card
+                        The card or list of cards to be added to the deck.
+
+            draw() :
+                Returns single card from the deck.
+
+                If replacement is False, the card is removed from the deck.
+                If replacement is True, the card is NOT removed from the deck.
+
+            discard() :
+                Removes all cards from the deck.
+                Returns None
+
+            hide() :
+                Sets the is_hidden attribute for each card in the deck to True.
+                Returns None
+
+            reset() :
+                Removes all cards from the deck and replaces them with the 52 standard playing cards.
+                Returns None
+
+            reveal() :
+                Sets the is_hidden attribute for each card in the deck to False.
+                Returns None
+
+            shuffle() :
+                Randomizes the order of the cards in the deck.
+                Returns None
+
+        Other Behaviors
+        ---------------
+            Length :
+                Passing a deck into the len() method will return the number of cards in the deck.
+
+            Iteration :
+                A deck object is interable and will interate over all cards held by the deck.
+
+            Concatination :
+                Two deck objects can be concatinated with the '+' operator. This returns a new deck.
+
+                Example: new_collection = collection_a + collection_b
+
+            Indexing :
+                A deck can be indexed to acces a card at a specific index.
+
+                Example: card = deck[2]
+
+                Note: Indexing can only access cards and cannot add or modify cards.
+
+            String :
+                Passing a deck into the str() method will return a string describing every card
+                in the deck.
     """
 
     def __init__(self, cards=None, replacement=False):
