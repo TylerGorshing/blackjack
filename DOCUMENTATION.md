@@ -4,7 +4,7 @@ This file describes the modules and classes defined in the blackjack package. Fo
 # Modules
 This program contains 3 modules: cards, players, and game. 
 
-The cards module is based on a my previous cards(link here) project with some modifications - mostly I used new techniques and skills that I learned since I first worte the original cards program. The cards module defines the Card, Collection, and Deck classes.
+The cards module is based on a my previous cards(link here) project with some modifications - mostly I used new techniques and skills that I learned since I first wrote the original cards program. The cards module defines the Card, Collection, and Deck classes.
 
 The players module has classes related to players of a game of blackjack. It includes the Hand, Player, HumanPlayer, and Dealer classes.
 
@@ -25,37 +25,37 @@ This class represents a standard playing card and is defined in the cards module
 - **is_hidden** (bool) - If `False` (the default), the card is 'faceup' and details about the card can be viewed (printed to the screen). If `True`, the card is 'facedown' and information about the card cannot be viewed.
 
 #### Data Attributes
-- **`value`** (int or None) - Returns the int value of the card. If `is_hidden` is True, returns None.
-- **`suit`** (str or None) - Returns the suit of the card. If `is_hidden` is True, returns None.
-- **`is_hidden`** (bool) - A repesentation of whether information about the card can be accessed. If set to True, the card is hidden or 'facedown' (no one can see the information). If False, the card is not hidden or 'faceup' and everyone can access information about the card. This attribute can only be changed with the `flip()` method.
+- **`value`** (int or None) - Returns the int value of the card. If `is_hidden` is `True`, returns None.
+- **`suit`** (str or None) - Returns the suit of the card. If `is_hidden` is `True`, returns None.
+- **`is_hidden`** (bool) - A repesentation of whether information about the card can be accessed. If set to `True`, the card is hidden or 'facedown' (no one can see the information). If `False`, the card is not hidden or 'faceup' and everyone can access information about the card. This attribute can only be changed with the `flip()` method.
 
 #### Methods
 - **`flip()`** - Changes the value of `is_hidden` to the opposite boolean value. This is like flipping a card over (from facedown to faceup). Returns None.
 
 #### Other Behaviors
 - **Comparison Operators** - Cards can be compared with the standard comparison operators (`==`, `<`, `>`, etc). Only the value of the card is used for comparisons.
-- **`str()`** - Returns a string with information about the card in the form of `'{value} of {suit}'`. If `is_hidden` is True, returns the string `'This card is hidden.'` This allows a card object to be passed into the `print()` method.
+- **`str()`** - Returns a string with information about the card in the form of `'{value} of {suit}'`. If `is_hidden` is `True`, returns the string `'This card is hidden.'` This allows a card object to be passed into the `print()` method.
 
 #### Examples of card objects
 
 ```
->>>card_a = Card(4, 'Spades')
->>>print(card_a)
+>>> card_a = Card(4, 'Spades')
+>>> print(card_a)
 4 of Spades
 
->>>card_b = Card(12, 'Hearts')
->>>print(card_b)
+>>> card_b = Card(12, 'Hearts')
+>>> print(card_b)
 Queen of Hearts
 
->>>card_b.flip() # changes is_hidden to True
->>>print(card_b)
+>>> card_b.flip() # changes is_hidden to True
+>>> print(card_b)
 This card is hidden.
 
->>>card_c = Card(8, 'Spades')
->>>card_a == card_b # 4 of Spades is not equal to Queen of Hearts
+>>> card_c = Card(8, 'Spades')
+>>> card_a == card_b # 4 of Spades is not equal to Queen of Hearts
 False
 
->>>card_a < card_b
+>>> card_a < card_b
 True
 
 >>>card_c = Card(4, 'Hearts')
@@ -86,13 +86,13 @@ This is the parent to the Deck and Hand classes, and is defined in the cards mod
     If replacement is `False`, the card is removed from the collection.
     If replacement is `True`, the card is NOT removed from the collection.
 - **`discard()`** - Removes all cards from the collection. Returns None.
-- **`hide()`** - Sets the is_hidden attribute for each card in the collection to True. Returns None.
-- **`reveal()`** - Sets the is_hidden attribute for each card in the collection to False. Returns None.
+- **`hide()`** - Sets the `is_hidden` attribute for each card in the collection to `True`. Returns None.
+- **`reveal()`** - Sets the `is_hidden` attribute for each card in the collection to `False`. Returns None.
 - **`shuffle()`** - Randomizes the order of the cards in the collection - just like shuffling a deck of cards. Returns None.
 
 #### Other Behaviors
 - **Iteration** - A collection object is interable and will interate over all cards held by the collection.
-- **Concatination** (The `+` operator) - Two collection objects can be concatinated with the '+' operator. This returns a new collection.
+- **Concatination** (The `+` operator) - Two collection objects can be concatinated with the `+` operator. This returns a new collection.
 - **Indexing** - A collection can be indexed to acces a card at a specific index and also supports slicing. Indexing can only access cards and cannot add or modify cards.
 - **`len()`** - Passing a collection into the `len()` method will return the number of cards in the collection.
 - **`str()`** - Passing a collection into the str() method will return a string describing every card in the collection. This allows a colletion to be passed as an argument into the `print()` method.
@@ -108,7 +108,7 @@ This class is defined in the cards module. It extends the `Collection` class, an
 - **replacement** (bool) - Determines if cards are drawn from the deck with or without replacement. If `False` (the default), then cards are drawn without replacement. Cards are drawn with replacement if `replacement` is set to `True`. This cannot be changed after the deck object has been constructed.
 
 #### Methods
-This section only details the methods defined in the Deck class. Other supported methods are defined in the `Collection` class.
+This section only details the methods defined in the Deck class. Other supported methods are detailed in the `Collection` class.
 
 - **`reset()`** - Resets the deck back to the original 52 playing cards. Returns None.
 
@@ -154,7 +154,7 @@ King of Clubs
 
 >>> deck_b = Deck()
 >>> deck_b.hide() # all the cards in a deck can be hidden
->>> deck_b.show()
+>>> print(deck_b)
 This card is hidden.
 This card is hidden.
 ...
@@ -212,7 +212,7 @@ A blackjack player. The base class for the Dealer and HumanPlayer classes.
 
 #### Methods
 - **`begin_trun()`** - Called at the beginning of a palyer's turn by the Game object. This method is required for the Game object, but it doesn't have to do anything. Returns None.
-- **`clean_up()`** - Empties the player's hand and sets 'had_turn' to False. Called by the Game object at the end of a game. Returns None
+- **`clean_up()`** - Empties the player's hand and sets 'had_turn' to `False`. Called by the Game object at the end of a game. Returns None
 - **`decision()`** - Allows the player object to 'hit' or 'stay' in a game of blackjack. Should return `True` if the player chooses to 'hit' and `False` if the player chooses to 'stay'.
 
 ### *class* `HumanPlayer(name)`
@@ -226,19 +226,17 @@ Defines a class that allows a human to play a game of blackjack. This class exte
 - **`decision()`** - Using the terminal, this methods asks the human if they would like to 'hit' or 'stay', collects input from the human, and communicates the decision with the game object. Returns `True` if the human chooses to 'hit' and `False` if the human chooses to 'stay'.
 
 ### *class* `Dealer()`
-This class defines the dealer in blackjack and extends the `Player` class. The dealer is fully automated by the game. For other supported attribues and methods, see the `Player` class.
+This class defines the dealer in blackjack and extends the `Player` class. The dealer is a fully automated player. For other supported attribues and methods, see the `Player` class.
 
 #### Parameters
-    The dealer class take no arguments at construction. The name of the a dealer object is `'The Dealer'`.
+The dealer class take no arguments at construction. The name of the a dealer object is `'The Dealer'`.
 
 #### Methods
 - **`begin_trun()`** - Reveals any hidden cards in the dealer's hand. Called by the game object at the begining of the dealer's turn. Returns None.
-- **`decision()`** - Determines if the dealer should hit or stay using the standard rules of blackjack. Returns True if the dealer hits (hand value of less than 17). Returns False if the dealer stays (hand value of 17 or more).
-
-This class includes all attributes of the Player class with the addition of a tern method. The dealer's name is always `'The Dealer'`.
+- **`decision()`** - Determines if the dealer should hit or stay using the standard rules of blackjack. Returns `True` if the dealer hits (hand value of less than 17). Returns `False` if the dealer stays (hand value of 17 or more).
 
 ## The Game Class
-Represents a game of blackjack. A game object handles all interactions in blackjack. The game shuffles the deck, deals the cards to all palyers, allows the players (including the dealer) to take their turn, and discards all player hands at the end of the game. Opptionally, the game object prints a summary at each step of blackjack.
+Represents a game of blackjack. A game object handles all interactions in blackjack. The game shuffles the deck, deals the cards to all palyers, allows the players (including the dealer) to take their turn, and discards all player hands at the end of the game. Opptionally, the game object prints a summary of each step.
 
 For more about starting or playing a game of blackjack, see the README.md file.
 
@@ -246,7 +244,7 @@ For more about starting or playing a game of blackjack, see the README.md file.
 
 #### Parameters
 - **\*players** (Player or list) - The player or list of players to play the game of blackjack.
-- **summary** (bool) - If True (the default), the game will print a summary of what's happening in the game. If False, the game will run without printing anything to the terminal.
+- **summary** (bool) - If `True` (the default), the game will print a summary of what's happening in the game. If `False`, the game will run without printing anything to the terminal.
 
 #### Notes
 ALL players MUST have the following methods.
@@ -260,9 +258,8 @@ ALL players MUST have the following methods.
 
 - `clean_up()`
 
-    Called at the end of the game. Generally, the player dicards their hand and had_turn is set to False in
-    in preparation for their turn.
+    Called at the end of the game. Generally, the player dicards their hand and `had_turn` is set to `False` in preparation for the next game.
 
 The game also assumes the following
-- Player objects have a `'name'` represented as a string
-- Players have a `Hand` object with a `value` attribute and a `add()` method
+- Player objects have a `'name'` represented as a string (used if `summary` is set to `True`)
+- Players have a `Hand` object with a `value` attribute and an `add()` method
