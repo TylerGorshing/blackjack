@@ -6,7 +6,7 @@ This program is written using Python 3.7.
 # Modules
 This program contains 3 modules: cards, players, and game. 
 
-The cards module is based on a my previous cards(link here) project with some modifications - mostly I used new techniques and skills that I learned since I first wrote the original cards program. The cards module defines the Card, Collection, and Deck classes.
+The cards module is based on a my previous cards project with some modifications - mostly I used new techniques and skills that I learned since I first wrote the original cards program. The cards module defines the Card, Collection, and Deck classes.
 
 The players module has classes related to players of a game of blackjack. It includes the Hand, Player, HumanPlayer, and Dealer classes.
 
